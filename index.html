@@ -18,7 +18,7 @@ header{background:var(--dark);color:#f2fcf4;padding:14px 18px;display:flex;align
 .hbtns{display:flex;gap:8px;align-items:center}
 .hbtn{background:transparent;border:1px solid #2f5646;color:#cfe6d6;border-radius:10px;padding:8px 12px;font-size:13px;font-weight:600}
 .badge{font-size:11px;font-weight:800;letter-spacing:1px;background:var(--lime);color:var(--dark);border-radius:20px;padding:4px 9px}
-main{max-width:960px;margin:0 auto;padding:20px 16px 60px}
+main{max-width:1160px;margin:0 auto;padding:20px 16px 60px}
 .hero{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
 .card{border-radius:18px;padding:20px;background:#fff;border:1px solid var(--line)}
 .card.money{background:var(--dark);color:#fff;border:0}
@@ -36,9 +36,12 @@ main{max-width:960px;margin:0 auto;padding:20px 16px 60px}
 .btn.danger{color:var(--red);border-color:#f0d6d1}
 .btn.sm{padding:5px 9px;font-size:12px;border-radius:8px}
 .tablewrap{background:#fff;border:1px solid var(--line);border-radius:18px;overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:13px;min-width:640px}
-th{background:#f0f5f1;text-align:left;font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);padding:11px 12px;white-space:nowrap}
-td{padding:12px;border-top:1px solid var(--line);vertical-align:top}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:980px}
+th small{display:block;margin-top:2px;white-space:nowrap}
+th.num small{text-align:right}
+td:nth-child(2){min-width:150px}
+th{background:#f0f5f1;text-align:left;font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);padding:10px 8px;white-space:nowrap}
+td{padding:10px 8px;border-top:1px solid var(--line);vertical-align:top}
 td.num,th.num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
 td small{display:block;color:var(--muted);margin-top:3px;font-size:11px;line-height:1.4}
 .in{color:#1b6a50;font-weight:700}.out{color:var(--red);font-weight:700}
@@ -107,12 +110,13 @@ body.admin .actions.adminonly{display:flex}
   <h2>Activity</h2>
   <div class="tablewrap">
     <table>
-      <thead><tr><th>Date</th><th>Activity</th><th class="num">Players</th><th class="num">Money in</th><th class="num">Money out</th><th class="num">Shuttlecocks</th><th>Photo / receipt</th><th class="adminonly"></th></tr></thead>
+      <thead><tr><th>Date</th><th>Activity</th><th class="num">Players</th><th class="num">Money in<small style="text-transform:none;letter-spacing:0;font-weight:500">paid / total</small></th><th class="num">Money out</th><th class="num">Balance after</th><th class="num">Balls</th><th class="num">Cost per person<small style="text-transform:none;letter-spacing:0;font-weight:500">courts + balls</small></th><th>Receipt</th><th class="adminonly"></th></tr></thead>
       <tbody id="rows"></tbody>
       <tfoot id="foot"></tfoot>
     </table>
     <div class="empty" id="empty">Loading…</div>
   </div>
+  <div class="note" id="costNote"></div>
   <div style="text-align:center;margin:12px 0 26px"><button class="btn" type="button" id="toggleAll" hidden></button></div>
   <div class="sec" id="outSec">
     <h2>Outstanding payments <small id="outTotal"></small></h2>
@@ -228,6 +232,15 @@ async function refreshAdmin(){
 
 /* ---------- render ---------- */
 const photoUrl=p=>sb.storage.from('receipts').getPublicUrl(p).data.publicUrl;
+const MEMBER_COURT=100000; // prepaid member court, per court per Sunday
+function courtCount(t){const m=String(t||'').match(/Courts?\s*([\d,\s\-&]+)/i);if(!m)return null;let n=0;
+  for(const p of m[1].split(/[,&]/)){const r=p.trim().match(/^(\d+)\s*-\s*(\d+)$/);if(r)n+=+r[2]-+r[1]+1;else if(/^\d+$/.test(p.trim()))n++}return n||null}
+function moneyIn(x){
+  if(!hasList(x))return `<span class="in">${rp(x.collected)}</span>`;
+  const n=x.attendees.length,p=paidN(x),paid=p*settings.fee,total=n*settings.fee;
+  return p===n?`<span class="in">${rp(paid)}</span> <small style="display:inline">(paid)</small>`
+    :`<span class="in">${rp(paid)}</span> / ${rp(total)}<small class="unp">${n-p} unpaid</small>`;
+}
 function render(){
   let cash=settings.openingCash,balls=settings.openingShuttles,players=0,inn=0,out=0;
   for(const x of items){
@@ -247,24 +260,32 @@ function render(){
   const vis=cutoff?items.filter(x=>x.date>=cutoff):items;
   const tb=$('toggleAll');tb.hidden=items.length===vis.length&&!showAll;
   tb.textContent=showAll?'Show last 5 weeks only':`Extend all (${items.length-vis.length} more)`;
-  let tp=0,ti=0,to=0;
-  for(const x of vis){if(x.type==='game'){tp+=gPlayers(x);ti+=gCollected(x);to+=x.extraCost}else to+=x.amount}
-  $('rows').innerHTML=vis.map(x=>{
-    let act,pl='',mi='',mo='',sb2='';
+  // running balance, oldest first (bills are counted before the game on the same day)
+  const asc=[...items].sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:((a.type==='game')-(b.type==='game')));
+  const bal=new Map();let run=settings.openingCash;
+  for(const x of asc){run+=x.type==='game'?gCollected(x)-x.extraCost:-x.amount;bal.set(x.id,run)}
+  const shut=items.filter(x=>x.type==='shuttle'),ballCost=shut.reduce((n,x)=>n+x.tubes*12,0)?shut.reduce((n,x)=>n+x.amount,0)/shut.reduce((n,x)=>n+x.tubes*12,0):0;
+  const costOf=x=>{const cc=courtCount(x.notes),mem=Math.max(0,(cc??(3+x.extraCourts))-x.extraCourts);return {court:mem*MEMBER_COURT+x.extraCost,balls:x.shuttles*ballCost}};
+  $('costNote').innerHTML=`<strong>Cost per person</strong> = (member courts at ${rp(MEMBER_COURT)} each + extra courts + balls used × average ball price ${rp(ballCost)}) ÷ players. Balance after counts only what has been paid so far. A game with unknown balls used (12 Jul) counts 0 balls.`;
+  const vis2=asc.filter(x=>vis.includes(x)).reverse();
+  let tp=0,ti=0,tt=0,to=0,tc=0;
+  for(const x of vis2){if(x.type==='game'){tp+=gPlayers(x);ti+=gCollected(x);tt+=hasList(x)?x.attendees.length*settings.fee:x.collected;to+=x.extraCost;const c=costOf(x);tc+=c.court+c.balls}else to+=x.amount}
+  $('rows').innerHTML=vis2.map(x=>{
+    let act,pl='',mi='',mo='',sb2='',cp='';
     if(x.type==='game'){
       act=`Game day${x.extraCourts?`<small>${x.extraCourts} extra court${x.extraCourts>1?'s':''}</small>`:''}`;
       const unp=x.attendees.length-paidN(x);
-      pl=hasList(x)?`<button class="btn sm" type="button" data-players="${esc(x.id)}">${gPlayers(x)} players</button>${unp?`<small class="unp">${unp} unpaid</small>`:'<small>all paid</small>'}`:gPlayers(x);
-      mi=`<span class="in">${rp(gCollected(x))}</span>`;mo=x.extraCost?`<span class="out">${rp(x.extraCost)}</span>`:'–';sb2=`−${x.shuttles}`;
+      pl=hasList(x)?`<button class="btn sm" type="button" data-players="${esc(x.id)}">${gPlayers(x)} players</button>`:gPlayers(x);
+      mi=moneyIn(x);{const c=costOf(x),p=gPlayers(x)||1;cp=`<strong>${rp((c.court+c.balls)/p)}</strong><small>${rp(c.court/p)} + ${rp(c.balls/p)}</small>`}mo=x.extraCost?`<span class="out">${rp(x.extraCost)}</span>`:'–';sb2=`−${x.shuttles}`;
     }else if(x.type==='court'){act='Court bill';mo=`<span class="out">${rp(x.amount)}</span>`}
     else{act=`Shuttlecock bill<small>${x.tubes} tube${x.tubes>1?'s':''}</small>`;mo=`<span class="out">${rp(x.amount)}</span>`;sb2=`+${x.tubes*12}`}
     if(x.notes)act+=`<small>${esc(x.notes)}</small>`;
     const rc=x.receipt?`<button class="btn sm" type="button" data-view="${esc(x.receipt)}">View</button>`:'<span style="color:#aab8b1">–</span>';
     const adm=isAdmin?`<td style="white-space:nowrap"><button class="btn sm" type="button" data-edit="${esc(x.id)}">Edit</button> <button class="btn sm danger" type="button" data-del="${esc(x.id)}">Delete</button></td>`:'';
-    return `<tr><td style="white-space:nowrap">${prettyDate(x.date)}</td><td>${act}</td><td class="num">${pl}</td><td class="num">${mi}</td><td class="num">${mo}</td><td class="num">${sb2}</td><td>${rc}</td>${adm}</tr>`;
+    return `<tr><td style="white-space:nowrap">${prettyDate(x.date)}</td><td>${act}</td><td class="num">${pl}</td><td class="num">${mi}</td><td class="num">${mo}</td><td class="num"><strong>${rp(bal.get(x.id))}</strong></td><td class="num">${sb2}</td><td class="num">${cp}</td><td>${rc}</td>${adm}</tr>`;
   }).join('');
   if($('plDlg').open)renderPlayers();
-  $('foot').innerHTML=items.length?`<tr><td colspan="2">Total${cutoff?' (shown)':''}</td><td class="num">${tp}</td><td class="num">${rp(ti)}</td><td class="num">${rp(to)}</td><td></td><td></td>${isAdmin?'<td></td>':''}</tr>`:'';
+  $('foot').innerHTML=items.length?`<tr><td colspan="2">Total${cutoff?' (shown)':''}</td><td class="num">${tp}</td><td class="num">${ti===tt?rp(ti)+' (paid)':rp(ti)+' / '+rp(tt)}</td><td class="num">${rp(to)}</td><td></td><td></td><td class="num">${tp?rp(tc/tp)+'<small>average</small>':''}</td><td></td>${isAdmin?'<td></td>':''}</tr>`:'';
 }
 
 /* ---------- read a pasted WhatsApp sign-up message ---------- */
