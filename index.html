@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#0e2822">
-<title>Goodminton</title>
+<title>Anomaly (Goodminton)</title>
 <style>
 :root{--ink:#152d28;--muted:#6d7f79;--line:#e7ede9;--bg:#f5f7f3;--green:#1b6a50;--dark:#0e2822;--lime:#d6ff7e;--red:#b3392d}
 *{box-sizing:border-box}
@@ -83,7 +83,7 @@ body.admin .actions.adminonly{display:flex}
 </head>
 <body>
 <header>
-  <div class="brand"><div class="logo">G.</div>Goodminton</div>
+  <div class="brand"><div class="logo">A.</div>Anomaly (Goodminton)</div>
   <div class="hbtns">
     <span class="badge adminonly">ADMIN</span>
     <button class="hbtn adminonly" id="openSettings" type="button">⚙ Settings</button>
@@ -97,17 +97,6 @@ body.admin .actions.adminonly{display:flex}
     <div class="card money"><div class="label">Money we have</div><div class="big" id="cash">–</div><div class="sub" id="cashSub">Collected − court &amp; shuttlecock spending</div></div>
     <div class="card"><div class="label">Shuttlecocks we have</div><div class="big" id="balls">–</div><div class="sub" id="ballsSub"></div></div>
   </section>
-
-  <div class="sec" id="outSec">
-    <h2>Outstanding payments <small id="outTotal"></small></h2>
-    <div class="tablewrap">
-      <table style="min-width:520px">
-        <thead><tr><th>Who</th><th>Game date(s)</th><th class="num">Owes</th><th class="adminonly"></th></tr></thead>
-        <tbody id="outRows"></tbody>
-      </table>
-      <div class="good" id="outNone" hidden>Nobody owes anything.</div>
-    </div>
-  </div>
 
   <div class="actions adminonly">
     <button class="btn primary" data-add="game" type="button">＋ Game day</button>
@@ -124,6 +113,18 @@ body.admin .actions.adminonly{display:flex}
     </table>
     <div class="empty" id="empty">Loading…</div>
   </div>
+  <div style="text-align:center;margin:12px 0 26px"><button class="btn" type="button" id="toggleAll" hidden></button></div>
+  <div class="sec" id="outSec">
+    <h2>Outstanding payments <small id="outTotal"></small></h2>
+    <div class="tablewrap">
+      <table style="min-width:520px">
+        <thead><tr><th>Who</th><th>Game date(s)</th><th class="num">Owes</th><th class="adminonly"></th></tr></thead>
+        <tbody id="outRows"></tbody>
+      </table>
+      <div class="good" id="outNone" hidden>Nobody owes anything.</div>
+    </div>
+  </div>
+
 </main>
 
 <dialog id="loginDlg">
@@ -186,6 +187,7 @@ const preview=!configured;
 if(preview){$('setupMsg').hidden=false}
 const sb=configured?window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY):null;
 
+let showAll=false;
 let items=[],settings={openingCash:0,openingShuttles:0,fee:30000},isAdmin=false;
 const paidN=x=>x.attendees.filter(a=>a.paid).length;
 const hasList=x=>x.attendees.length>0;
@@ -240,7 +242,14 @@ function render(){
   $('ballsSub').textContent=balls<0?'Below zero — check the records':`about ${Math.floor(balls/12)} tubes (12 per tube)`;
   $('empty').hidden=items.length>0;$('empty').textContent='No activity yet.';
   renderOutstanding();
-  $('rows').innerHTML=items.map(x=>{
+  const gd=[...new Set(items.filter(x=>x.type==='game').map(x=>x.date))].sort().reverse();
+  const cutoff=(showAll||gd.length<=5)?null:gd[4];
+  const vis=cutoff?items.filter(x=>x.date>=cutoff):items;
+  const tb=$('toggleAll');tb.hidden=items.length===vis.length&&!showAll;
+  tb.textContent=showAll?'Show last 5 weeks only':`Extend all (${items.length-vis.length} more)`;
+  let tp=0,ti=0,to=0;
+  for(const x of vis){if(x.type==='game'){tp+=gPlayers(x);ti+=gCollected(x);to+=x.extraCost}else to+=x.amount}
+  $('rows').innerHTML=vis.map(x=>{
     let act,pl='',mi='',mo='',sb2='';
     if(x.type==='game'){
       act=`Game day${x.extraCourts?`<small>${x.extraCourts} extra court${x.extraCourts>1?'s':''}</small>`:''}`;
@@ -255,7 +264,7 @@ function render(){
     return `<tr><td style="white-space:nowrap">${prettyDate(x.date)}</td><td>${act}</td><td class="num">${pl}</td><td class="num">${mi}</td><td class="num">${mo}</td><td class="num">${sb2}</td><td>${rc}</td>${adm}</tr>`;
   }).join('');
   if($('plDlg').open)renderPlayers();
-  $('foot').innerHTML=items.length?`<tr><td colspan="2">Total</td><td class="num">${players}</td><td class="num">${rp(inn)}</td><td class="num">${rp(out)}</td><td></td><td></td>${isAdmin?'<td></td>':''}</tr>`:'';
+  $('foot').innerHTML=items.length?`<tr><td colspan="2">Total${cutoff?' (shown)':''}</td><td class="num">${tp}</td><td class="num">${rp(ti)}</td><td class="num">${rp(to)}</td><td></td><td></td>${isAdmin?'<td></td>':''}</tr>`:'';
 }
 
 /* ---------- read a pasted WhatsApp sign-up message ---------- */
@@ -343,8 +352,7 @@ function renderPlayers(){
   $('plTitle').textContent='Players · '+prettyDate(x.date);
   $('plSummary').innerHTML=`<strong>${paid} of ${n}</strong> paid · ${rp(paid*settings.fee)} collected`+(n>paid?` · <span class="unp">${rp((n-paid)*settings.fee)} outstanding</span>`:'');
   $('plAll').hidden=paid===n;
-  const sorted=[...x.attendees].sort((a,b)=>a.paid-b.paid);
-  $('plList').innerHTML=sorted.map(a=>`<div class="pl"><span>${esc(a.name)}${a.cash?' <small>(cash)</small>':''}</span>`+(isAdmin
+  $('plList').innerHTML=x.attendees.map((a,i)=>`<div class="pl"><span>${i+1}. ${esc(a.name)}${a.cash?' <small>(cash)</small>':''}</span>`+(isAdmin
     ?`<span style="white-space:nowrap"><button class="btn sm ${a.paid?'':'primary'}" type="button" data-toggle="${esc(x.id)}:${esc(a.id)}">${a.paid?'Paid ✓':'Mark paid'}</button> <button class="btn sm danger" type="button" data-rmp="${esc(x.id)}:${esc(a.id)}" title="Remove from this game">✕</button></span>`
     :`<span class="${a.paid?'in':'unp'}">${a.paid?'Paid':'Unpaid'}</span>`)+`</div>`).join('');
 }
@@ -537,6 +545,7 @@ document.addEventListener('click',async e=>{
     $('viewDlg').showModal();
   }
 });
+$('toggleAll').onclick=()=>{showAll=!showAll;render()};
 $('closeView').onclick=()=>$('viewDlg').close();
 
 /* ---------- settings (admin) ---------- */

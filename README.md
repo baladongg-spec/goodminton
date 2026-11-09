@@ -1,4 +1,4 @@
-# Goodminton
+# Anomaly (Goodminton)
 
 Badminton club tracker (PB Anomaly). Single page `index.html`, data in Supabase.
 
