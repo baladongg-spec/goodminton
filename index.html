@@ -1,169 +1,320 @@
 <!doctype html>
-<html lang="en">
+<html lang="id">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#0e2822">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0c3326">
 <title>Anomaly (Goodminton)</title>
+<meta name="description" content="Kas, stok bola dan jadwal main klub badminton Anomaly (Goodminton).">
+<meta property="og:title" content="Anomaly (Goodminton)">
+<meta property="og:description" content="Kas klub, stok bola, dan siapa yang belum bayar.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230c3326'/%3E%3Cpath d='M20 14h24l-6 26H26z' fill='%23d4f25a'/%3E%3Cpath d='M26 14l3 26M38 14l-3 26M32 14v26' stroke='%230c3326' stroke-width='2'/%3E%3Ccircle cx='32' cy='46' r='7' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#152d28;--muted:#6d7f79;--line:#e7ede9;--bg:#f5f7f3;--green:#1b6a50;--dark:#0e2822;--lime:#d6ff7e;--red:#b3392d}
+:root{
+  --court:#0c3326;--court2:#12503b;--lime:#d4f25a;--lime2:#b9dc35;
+  --ink:#13241e;--muted:#66796f;--line:#e5ebe7;--bg:#f3f5f0;--card:#fff;
+  --green:#15805a;--red:#c2412d;--redbg:#fdf0ed;--amber:#b7790b;--amberbg:#fdf5e2;--blue:#2a6496;--bluebg:#eaf2fa;
+  --r:20px;--shadow:0 1px 2px #0c33260d,0 8px 28px #0c33260f;
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
-button,input,textarea{font:inherit}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Plus Jakarta Sans",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14px;line-height:1.45}
+button,input,textarea{font:inherit;color:inherit}
 button{cursor:pointer}
 button:disabled{opacity:.5;cursor:not-allowed}
-header{background:var(--dark);color:#f2fcf4;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:8px}
-.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;letter-spacing:-.5px}
-.logo{width:34px;height:34px;border-radius:11px;background:var(--lime);color:var(--dark);display:grid;place-items:center;font-weight:900;transform:rotate(-7deg)}
-.hbtns{display:flex;gap:8px;align-items:center}
-.hbtn{background:transparent;border:1px solid #2f5646;color:#cfe6d6;border-radius:10px;padding:8px 12px;font-size:13px;font-weight:600}
-.badge{font-size:11px;font-weight:800;letter-spacing:1px;background:var(--lime);color:var(--dark);border-radius:20px;padding:4px 9px}
-main{max-width:1160px;margin:0 auto;padding:20px 16px 60px}
-.hero{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
-.card{border-radius:18px;padding:20px;background:#fff;border:1px solid var(--line)}
-.card.money{background:var(--dark);color:#fff;border:0}
-.card .label{font-size:12px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted)}
-.card.money .label{color:#9fbcaf}
-.card .big{font-size:clamp(26px,6vw,40px);font-weight:800;letter-spacing:-1.3px;margin:8px 0 4px;line-height:1.05}
-.card .sub{font-size:12px;color:var(--muted)}
-.card.money .sub{color:#9fbcaf}
-.neg{color:var(--red)}.card.money .neg{color:#ff9b8f}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
-.btn{border:1px solid #d5e3d9;background:#fff;color:var(--ink);border-radius:12px;padding:11px 14px;font-weight:700;font-size:13px}
-.btn:hover{background:#f0f7f1}
-.btn.primary{background:var(--green);border-color:var(--green);color:#fff}
-.btn.primary:hover{background:#14553f}
+.wrap{max-width:1180px;margin:0 auto;padding:0 18px}
+.num,td.num,th.num{font-variant-numeric:tabular-nums}
+
+/* ---------- header ---------- */
+.top{position:relative;overflow:hidden;color:#eef8f1;background:radial-gradient(120% 140% at 85% 0%,#1a6a4d 0%,var(--court) 55%,#082419 100%);padding:18px 0 92px}
+.court{position:absolute;right:-60px;top:-30px;width:780px;max-width:120%;opacity:.13;pointer-events:none;transform:rotate(-8deg)}
+.court *{fill:none;stroke:#fff;stroke-width:5}
+.topbar{position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:46px;height:46px;border-radius:14px;background:var(--lime);display:grid;place-items:center;box-shadow:0 6px 20px #0006;flex:none}
+.logo svg{width:30px;height:30px}
+.brand h1{margin:0;font-size:21px;font-weight:800;letter-spacing:-.4px;line-height:1.1}
+.brand p{margin:2px 0 0;font-size:12.5px;color:#a8c8b8;font-weight:500}
+.ctrls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.seg{display:inline-flex;background:#ffffff14;border:1px solid #ffffff22;border-radius:11px;padding:3px}
+.seg button{border:0;background:transparent;color:#cfe3d7;font-weight:700;font-size:12px;padding:6px 10px;border-radius:8px;transition:background .2s,color .2s}
+.seg button.on{background:var(--lime);color:var(--court)}
+.hbtn{background:#ffffff10;border:1px solid #ffffff2a;color:#eef8f1;border-radius:11px;padding:8px 13px;font-size:13px;font-weight:700;transition:background .2s,transform .15s}
+.hbtn:hover{background:#ffffff22}
+.hbtn:active{transform:scale(.97)}
+.badge{font-size:10.5px;font-weight:800;letter-spacing:1.2px;background:var(--lime);color:var(--court);border-radius:20px;padding:5px 10px}
+
+/* ---------- hero cards ---------- */
+main{position:relative;margin-top:-68px;padding-bottom:70px}
+.hero{display:grid;grid-template-columns:1.45fr 1fr 1fr;gap:14px;margin-bottom:26px}
+.card{background:var(--card);border-radius:var(--r);padding:20px 22px;box-shadow:var(--shadow);border:1px solid #ffffffaa;position:relative;overflow:hidden}
+.label{font-size:11.5px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:7px}
+.label .dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px #15805a22}
+.big{font-size:clamp(30px,4.6vw,44px);font-weight:800;letter-spacing:-1.4px;line-height:1.05;margin:10px 0 4px}
+.big.neg{color:var(--red)}
+.sub{font-size:12.5px;color:var(--muted)}
+.spark{position:absolute;right:18px;top:18px;width:150px;height:46px}
+.spark path.l{fill:none;stroke:var(--green);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.spark path.a{fill:url(#sg);stroke:none}
+.sparkcap{position:absolute;right:20px;top:66px;font-size:10.5px;color:var(--muted);font-weight:600}
+.bar{height:10px;border-radius:10px;background:#edf1ee;margin:16px 0 10px;overflow:hidden;position:relative}
+.bar i{display:block;height:100%;width:0;border-radius:10px;background:linear-gradient(90deg,var(--green),#3fb47f);transition:width 1s var(--ease)}
+.splits{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:12.5px}
+.splits b{display:block;font-size:15px;font-weight:800;letter-spacing:-.2px}
+.splits .owed b{color:var(--red)}
+.splits .r{text-align:right}
+.splits small{color:var(--muted);font-weight:600}
+.tubes{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
+.tube{display:grid;grid-template-columns:repeat(12,1fr);gap:2px;width:96px;height:16px;padding:3px;border-radius:7px;background:#eef2ef}
+.tube s{border-radius:2px;background:#dfe6e1;text-decoration:none;transition:background .4s}
+.tube s.f{background:var(--lime2)}
+.warn{margin-top:10px;font-size:12px;font-weight:700;color:var(--amber);background:var(--amberbg);border-radius:9px;padding:6px 10px;display:inline-block}
+.lg{display:flex;align-items:center;gap:16px;margin-top:12px}
+.ring{width:78px;height:78px;flex:none;position:relative}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:8}
+.ring .bg{stroke:#edf1ee}.ring .fg{stroke:var(--green);stroke-linecap:round;transition:stroke-dashoffset 1s var(--ease)}
+.ring span{position:absolute;inset:0;display:grid;place-items:center;font-weight:800;font-size:15px}
+.lg dl{margin:0;display:grid;gap:6px;font-size:12.5px}
+.lg dt{color:var(--muted);font-weight:600}
+.lg dd{margin:0;font-weight:800;font-size:15px}
+
+/* ---------- sections ---------- */
+.sechead{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:0 0 12px}
+h2{margin:0;font-size:19px;font-weight:800;letter-spacing:-.3px}
+.sechead small{font-size:12.5px;color:var(--muted);font-weight:600}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:1px solid #d7e2da;background:#fff;color:var(--ink);border-radius:12px;padding:10px 14px;font-weight:700;font-size:13px;transition:background .2s,border-color .2s,transform .15s,box-shadow .2s}
+.btn:hover{background:#f2f8f3;border-color:#c5d8cb}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:var(--court);border-color:var(--court);color:#fff}
+.btn.primary:hover{background:var(--court2)}
+.btn.lime{background:var(--lime);border-color:var(--lime);color:var(--court)}
+.btn.lime:hover{background:var(--lime2)}
 .btn.danger{color:var(--red);border-color:#f0d6d1}
-.btn.sm{padding:5px 9px;font-size:12px;border-radius:8px}
-.tablewrap{background:#fff;border:1px solid var(--line);border-radius:18px;overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:13px;min-width:980px}
-th small{display:block;margin-top:2px;white-space:nowrap}
-th.num small{text-align:right}
-td:nth-child(2){min-width:150px}
-th{background:#f0f5f1;text-align:left;font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);padding:10px 8px;white-space:nowrap}
-td{padding:10px 8px;border-top:1px solid var(--line);vertical-align:top}
-td.num,th.num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
-td small{display:block;color:var(--muted);margin-top:3px;font-size:11px;line-height:1.4}
-.in{color:#1b6a50;font-weight:700}.out{color:var(--red);font-weight:700}
-tfoot td{background:#f7faf8;font-weight:800}
-.empty{padding:40px 16px;text-align:center;color:var(--muted)}
-h2{font-size:16px;margin:0 0 12px}
-dialog{border:0;border-radius:18px;padding:22px;width:min(480px,94vw);max-height:92vh;box-shadow:0 20px 60px #0004}
-dialog::backdrop{background:#0e282288}
+.btn.sm{padding:5px 10px;font-size:12px;border-radius:9px}
+.panel{background:#fff;border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:1000px}
+th{background:#f6f8f5;text-align:left;font-size:10.5px;letter-spacing:.9px;text-transform:uppercase;color:var(--muted);padding:12px 10px;white-space:nowrap;font-weight:700}
+th small{display:block;margin-top:2px;text-transform:none;letter-spacing:0;font-weight:500;font-size:10.5px}
+td{padding:12px 10px;border-top:1px solid var(--line);vertical-align:top}
+tbody tr{transition:background .2s}
+tbody tr:hover{background:#fafcf9}
+td.num,th.num{text-align:right;white-space:nowrap}
+td small{display:block;color:var(--muted);margin-top:3px;font-size:11.5px;line-height:1.4}
+td:nth-child(2){min-width:170px}
+.tag{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:13px}
+.tag i{width:8px;height:8px;border-radius:50%;flex:none}
+.tag.g i{background:var(--green)}.tag.c i{background:var(--blue)}.tag.s i{background:var(--amber)}
+.in{color:var(--green);font-weight:700}.out{color:var(--red);font-weight:700}
+.unp{color:var(--red);font-weight:700}
+.paidtag{display:inline-block;font-size:10.5px;font-weight:700;color:var(--green);background:#e7f5ee;border-radius:6px;padding:1px 6px;margin-left:4px;vertical-align:1px}
+.plbtn{display:inline-flex;align-items:center;gap:6px}
+.plbtn svg{width:14px;height:14px}
+tfoot td{background:#f6f8f5;font-weight:800;border-top:1px solid var(--line)}
+.empty{padding:44px 16px;text-align:center;color:var(--muted)}
+.note{font-size:11.5px;color:var(--muted);margin:12px 4px 0;line-height:1.6}
+.more{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:16px 0 38px}
+
+/* outstanding */
+.owegrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.owe{background:#fff;border-radius:16px;box-shadow:var(--shadow);padding:13px 14px;display:flex;align-items:center;gap:12px}
+.av{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-weight:800;font-size:13px;flex:none;color:var(--court);background:#e9f6c4}
+.owe .who{flex:1;min-width:0}
+.owe .who b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.chip{display:inline-flex;align-items:center;gap:6px;background:var(--redbg);color:#8c2f20;border-radius:20px;padding:2px 9px;font-size:11.5px;font-weight:700;white-space:nowrap}
+.chip button{border:0;background:#fff;border-radius:12px;padding:1px 8px;font-size:11px;font-weight:800;color:var(--green);margin-right:-5px;transition:background .2s}
+.chip button:hover{background:#e7f5ee}
+.owe .amt{text-align:right;font-weight:800;color:var(--red);white-space:nowrap}
+.owe .amt .btn{display:block;margin-top:6px}
+.good{background:#fff;border-radius:16px;box-shadow:var(--shadow);padding:22px;text-align:center;color:var(--green);font-weight:700}
+
+/* dialogs */
+dialog{border:0;border-radius:22px;padding:24px;width:min(500px,94vw);max-height:92vh;box-shadow:0 30px 80px #0c332655;color:var(--ink)}
+dialog::backdrop{background:#08241999;backdrop-filter:blur(3px)}
+dialog[open]{animation:pop .22s var(--ease)}
+dialog[open]::backdrop{animation:fade .22s ease}
+dialog h2{margin-bottom:14px}
 .field{margin-bottom:14px}
 .field label{display:block;font-size:12px;font-weight:700;margin-bottom:6px}
-input,textarea{width:100%;border:1px solid #dfe7e2;border-radius:12px;padding:11px 12px;color:var(--ink);background:#fff}
-input:focus,textarea:focus{outline:0;border-color:#45a17b;box-shadow:0 0 0 3px #d7f2e5}
+input,textarea{width:100%;border:1px solid #dbe4de;border-radius:12px;padding:11px 12px;background:#fff;transition:border-color .2s,box-shadow .2s}
+input:focus,textarea:focus{outline:0;border-color:#3d9a72;box-shadow:0 0 0 4px #d4f0e2}
+input[type=checkbox]{width:auto;margin-right:6px}
 textarea{min-height:64px;resize:vertical}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.hint{font-size:11px;color:var(--muted);margin-top:5px}
+.hint{font-size:11.5px;color:var(--muted);margin-top:5px}
 .dlgactions{display:flex;gap:8px;margin-top:18px}
 .dlgactions .primary{flex:1}
-.toast{position:fixed;left:50%;bottom:20px;transform:translate(-50%,20px);background:#123d2e;color:#fff;padding:12px 18px;border-radius:12px;font-size:13px;opacity:0;pointer-events:none;transition:.2s;z-index:9;max-width:90vw}
-.toast.show{opacity:1;transform:translate(-50%,0)}
-.receipt img{max-width:100%;border-radius:10px;display:block;margin:0 auto}
-.note{font-size:11px;color:var(--muted);margin-top:16px;line-height:1.6}
-.setup{background:#fff4dc;border:1px solid #f0dca8;color:#7a5410;border-radius:14px;padding:16px;font-size:13px;line-height:1.6;margin-bottom:16px}
-.sec{margin:0 0 22px}
-.sec h2{display:flex;align-items:baseline;justify-content:space-between;gap:8px;flex-wrap:wrap}
-.sec h2 small{font-size:12px;font-weight:600;color:var(--muted)}
-.chip{display:inline-flex;align-items:center;gap:6px;background:#fdf1ef;border:1px solid #f3d5d0;color:#7d2a21;border-radius:20px;padding:3px 4px 3px 10px;font-size:12px;font-weight:600;margin:2px 4px 2px 0;white-space:nowrap}
-.chip.ro{padding:3px 10px}
-.chip button{border:0;background:#fff;border-radius:14px;padding:2px 8px;font-size:11px;font-weight:700;color:var(--green)}
-.unp{color:var(--red);font-weight:700}
-.pl{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 0;border-top:1px solid var(--line);font-size:14px}
-.pl small{color:var(--muted)}
-#plList{max-height:48vh;overflow:auto;margin:10px 0}
+.plhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+.plsum{font-size:13px}
+.plbar{height:8px;border-radius:8px;background:#edf1ee;overflow:hidden;margin:8px 0 12px}
+.plbar i{display:block;height:100%;background:linear-gradient(90deg,var(--green),#3fb47f);transition:width .5s var(--ease)}
+#plList{max-height:46vh;overflow:auto;margin:6px -6px 0;padding:0 6px}
+.pl{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:14px}
+.pl .n{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:11.5px;font-weight:800;background:#f0f4f1;color:var(--muted);flex:none;transition:background .3s,color .3s}
+.pl.ok .n{background:#e7f5ee;color:var(--green)}
+.pl .nm{flex:1;min-width:0}
+.pl .nm small{color:var(--muted)}
+.st{font-size:12px;font-weight:700;border-radius:9px;padding:5px 10px;border:1px solid transparent;white-space:nowrap;transition:background .2s,color .2s,border-color .2s}
+.st.ok{background:#e7f5ee;color:var(--green)}
+.st.no{background:var(--redbg);color:var(--red)}
+button.st.no{background:#fff;border-color:#f0d6d1}
+button.st.no:hover{background:var(--redbg)}
+button.st.ok:hover{background:#d8efe3}
+.x{border:0;background:transparent;color:#a9b6af;font-size:15px;padding:4px 6px;border-radius:8px}
+.x:hover{color:var(--red);background:var(--redbg)}
+details summary{cursor:pointer;font-weight:700;font-size:13px}
 .addp{display:flex;gap:8px;margin-top:10px}
 .addp input{flex:1}
-.good{padding:18px;text-align:center;color:var(--green);font-weight:700}
-.adminonly{display:none}
-body.admin .adminonly{display:revert}
-body.admin .addp.adminonly{display:flex}
-body.admin .actions.adminonly{display:flex}
-@media(max-width:520px){.hero{grid-template-columns:1fr}.card{padding:16px}}
+.receipt img{max-width:100%;border-radius:12px;display:block;margin:0 auto}
+.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,24px);background:var(--court);color:#fff;padding:12px 18px;border-radius:14px;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .25s,transform .35s var(--ease);z-index:20;max-width:90vw;box-shadow:0 12px 30px #0c332640}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.setup{background:#fff7e3;border:1px solid #f0dca8;color:#7a5410;border-radius:16px;padding:14px 16px;font-size:13px;line-height:1.6;margin-bottom:16px}
+.adminonly{display:none!important}
+body.admin .adminonly{display:revert!important}
+body.admin .actions.adminonly,body.admin .addp.adminonly{display:flex!important}
+body.admin span.adminonly,body.admin button.adminonly{display:inline-block!important}
+
+/* ---------- motion ---------- */
+@keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes rowin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes flash{0%{background:#e9f8d2}100%{background:transparent}}
+@keyframes draw{from{stroke-dashoffset:var(--len)}to{stroke-dashoffset:0}}
+.rise{animation:up .6s var(--ease) both;animation-delay:var(--d,0s)}
+tr.anim,.owe.anim{animation:rowin .4s var(--ease) both;animation-delay:calc(var(--i,0)*28ms)}
+.pl.flash{animation:flash 1s ease}
+.brand .logo{animation:up .6s var(--ease) both}
+.spark path.l{stroke-dasharray:var(--len);animation:draw 1.2s var(--ease) both .3s}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+@media (max-width:900px){.hero{grid-template-columns:1fr 1fr}.hero .money{grid-column:1/-1}}
+@media (max-width:560px){
+  .hero{grid-template-columns:1fr}.card{padding:18px}
+  .spark{width:110px;height:36px}.sparkcap{display:none}
+  .brand h1{font-size:18px}.top{padding-bottom:84px}
+  .row2{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
-<header>
-  <div class="brand"><div class="logo">A.</div>Anomaly (Goodminton)</div>
-  <div class="hbtns">
-    <span class="badge adminonly">ADMIN</span>
-    <button class="hbtn adminonly" id="openSettings" type="button">⚙ Settings</button>
-    <button class="hbtn" id="authBtn" type="button">Admin login</button>
-  </div>
-</header>
-<main>
-  <div class="setup" id="setupMsg" hidden><strong>Preview mode.</strong> You are looking at the July to November 2026 data built into this page. Nothing you change is saved. To save changes, paste your Supabase <em>Project URL</em> and <em>anon public key</em> into <code>SUPABASE_URL</code> and <code>SUPABASE_ANON_KEY</code> near the top of the script, and run <code>setup.sql</code> then <code>seed.sql</code>. Tap "Admin login" to try the admin buttons.</div>
-
-  <section class="hero">
-    <div class="card money"><div class="label">Money we have</div><div class="big" id="cash">–</div><div class="sub" id="cashSub">Collected − court &amp; shuttlecock spending</div></div>
-    <div class="card"><div class="label">Shuttlecocks we have</div><div class="big" id="balls">–</div><div class="sub" id="ballsSub"></div></div>
-  </section>
-
-  <div class="actions adminonly">
-    <button class="btn primary" data-add="game" type="button">＋ Game day</button>
-    <button class="btn" data-add="court" type="button">＋ Court bill</button>
-    <button class="btn" data-add="shuttle" type="button">＋ Shuttlecock bill</button>
-  </div>
-
-  <h2>Activity</h2>
-  <div class="tablewrap">
-    <table>
-      <thead><tr><th>Date</th><th>Activity</th><th class="num">Players</th><th class="num">Money in<small style="text-transform:none;letter-spacing:0;font-weight:500">paid / total</small></th><th class="num">Money out</th><th class="num">Balance after</th><th class="num">Balls</th><th class="num">Cost per person<small style="text-transform:none;letter-spacing:0;font-weight:500">courts + balls</small></th><th>Receipt</th><th class="adminonly"></th></tr></thead>
-      <tbody id="rows"></tbody>
-      <tfoot id="foot"></tfoot>
-    </table>
-    <div class="empty" id="empty">Loading…</div>
-  </div>
-  <div class="note" id="costNote"></div>
-  <div style="text-align:center;margin:12px 0 26px"><button class="btn" type="button" id="toggleAll" hidden></button> <button class="btn" type="button" id="resetWeeks" hidden>Show last 5 weeks only</button></div>
-  <div class="sec" id="outSec">
-    <h2>Outstanding payments <small id="outTotal"></small></h2>
-    <div class="tablewrap">
-      <table style="min-width:520px">
-        <thead><tr><th>Who</th><th>Game date(s)</th><th class="num">Owes</th><th class="adminonly"></th></tr></thead>
-        <tbody id="outRows"></tbody>
-      </table>
-      <div class="good" id="outNone" hidden>Nobody owes anything.</div>
+<header class="top">
+  <svg class="court" viewBox="0 0 1340 610" aria-hidden="true"><rect x="3" y="3" width="1334" height="604"/><path d="M3 49H1337M3 561H1337M79 3V607M1261 3V607M472 3V607M868 3V607M3 305H472M868 305H1337"/><path d="M670 0V610" style="stroke-dasharray:14 10;stroke-width:8"/></svg>
+  <div class="wrap topbar">
+    <div class="brand">
+      <div class="logo"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M8 4h16l-4 16h-8z" fill="#0c3326"/><path d="M12 4l2 16M20 4l-2 16M16 4v16M9.5 10h13" stroke="#d4f25a" stroke-width="1.3" fill="none"/><circle cx="16" cy="24.5" r="5" fill="#fff" stroke="#0c3326" stroke-width="1.6"/></svg></div>
+      <div><h1>Anomaly (Goodminton)</h1><p data-i="tagline"></p></div>
+    </div>
+    <div class="ctrls">
+      <div class="seg" role="group" aria-label="Language"><button type="button" data-lang="id">ID</button><button type="button" data-lang="en">EN</button></div>
+      <span class="badge adminonly">ADMIN</span>
+      <button class="hbtn adminonly" id="openSettings" type="button" data-i="settings"></button>
+      <button class="hbtn" id="authBtn" type="button"></button>
     </div>
   </div>
+</header>
 
+<main class="wrap">
+  <div class="setup rise" id="setupMsg" hidden></div>
+
+  <section class="hero">
+    <div class="card money rise" style="--d:.05s">
+      <div class="label"><span class="dot"></span><span data-i="cashLabel"></span></div>
+      <svg class="spark" id="spark" viewBox="0 0 150 46" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#15805a" stop-opacity=".22"/><stop offset="1" stop-color="#15805a" stop-opacity="0"/></linearGradient></defs></svg>
+      <div class="sparkcap" id="sparkCap"></div>
+      <div class="big num" id="cash">–</div>
+      <div class="sub" data-i="cashSub"></div>
+      <div class="bar"><i id="cashBar"></i></div>
+      <div class="splits">
+        <div class="owed"><small data-i="owedL"></small><b class="num" id="owed">–</b><small id="owedWho"></small></div>
+        <div class="r"><small data-i="ifAllL"></small><b class="num" id="ifAll">–</b><small id="pctPaid"></small></div>
+      </div>
+    </div>
+    <div class="card rise" style="--d:.12s">
+      <div class="label" data-i="ballsLabel"></div>
+      <div class="big num" id="balls">–</div>
+      <div class="sub" id="ballsSub"></div>
+      <div class="tubes" id="tubes"></div>
+      <div id="ballsWarn"></div>
+    </div>
+    <div class="card rise" style="--d:.19s">
+      <div class="label" id="lgLabel"></div>
+      <div class="lg">
+        <div class="ring"><svg viewBox="0 0 80 80"><circle class="bg" cx="40" cy="40" r="34"/><circle class="fg" id="ringFg" cx="40" cy="40" r="34" stroke-dasharray="213.6" stroke-dashoffset="213.6"/></svg><span id="ringTxt">–</span></div>
+        <dl><div><dt data-i="lgPlayers"></dt><dd id="lgPlayers">–</dd></div><div><dt data-i="costPP"></dt><dd id="lgCost">–</dd></div></dl>
+      </div>
+      <div class="sub" id="lgPaid" style="margin-top:10px"></div>
+    </div>
+  </section>
+
+  <div class="sechead rise" style="--d:.24s">
+    <h2 data-i="activity"></h2>
+    <div class="actions adminonly">
+      <button class="btn lime" data-add="game" type="button" data-i="addGame"></button>
+      <button class="btn" data-add="court" type="button" data-i="addCourt"></button>
+      <button class="btn" data-add="shuttle" type="button" data-i="addShuttle"></button>
+    </div>
+  </div>
+  <div class="panel rise" style="--d:.28s">
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th data-i="thDate"></th><th data-i="thAct"></th><th class="num" data-i="thPl"></th><th class="num"><span data-i="thIn"></span><small data-i="thInSub"></small></th><th class="num" data-i="thOut"></th><th class="num" data-i="thBal"></th><th class="num" data-i="thBalls"></th><th class="num"><span data-i="thCpp"></span><small data-i="thCppSub"></small></th><th data-i="thRc"></th><th class="adminonly"></th></tr></thead>
+        <tbody id="rows"></tbody>
+        <tfoot id="foot"></tfoot>
+      </table>
+    </div>
+    <div class="empty" id="empty"></div>
+  </div>
+  <div class="note" id="costNote"></div>
+  <div class="more"><button class="btn" type="button" id="moreBtn" hidden></button><button class="btn" type="button" id="resetWeeks" hidden data-i="reset"></button></div>
+
+  <div class="sechead">
+    <h2 data-i="outTitle"></h2><small id="outTotal"></small>
+  </div>
+  <div class="owegrid" id="outGrid"></div>
+  <div class="good" id="outNone" hidden data-i="outNone"></div>
 </main>
 
 <dialog id="loginDlg">
-  <h2>Admin login</h2>
+  <h2 data-i="loginTitle"></h2>
   <form id="loginForm">
     <div class="field"><label for="l_email">Email</label><input id="l_email" type="email" autocomplete="username" required></div>
-    <div class="field"><label for="l_pass">Password</label><input id="l_pass" type="password" autocomplete="current-password" required></div>
-    <div class="dlgactions"><button class="btn primary" type="submit" id="loginBtn">Log in</button><button class="btn" type="button" id="loginCancel">Cancel</button></div>
+    <div class="field"><label for="l_pass" data-i="password"></label><input id="l_pass" type="password" autocomplete="current-password" required></div>
+    <div class="dlgactions"><button class="btn primary" type="submit" id="loginBtn" data-i="loginGo"></button><button class="btn" type="button" id="loginCancel" data-i="cancel"></button></div>
   </form>
 </dialog>
 
-<dialog id="formDlg"><form id="form" novalidate><h2 id="formTitle"></h2><div id="fields"></div><div class="dlgactions"><button class="btn primary" type="submit" id="saveBtn">Save</button><button class="btn" type="button" id="cancel">Cancel</button></div></form></dialog>
+<dialog id="formDlg"><form id="form" novalidate><h2 id="formTitle"></h2><div id="fields"></div><div class="dlgactions"><button class="btn primary" type="submit" id="saveBtn" data-i="save"></button><button class="btn" type="button" id="cancel" data-i="cancel"></button></div></form></dialog>
 
 <dialog id="plDlg">
-  <h2 id="plTitle">Players</h2>
-  <div id="plSummary" style="font-size:13px"></div>
-  <div class="actions adminonly" style="margin:12px 0 0"><button class="btn primary" type="button" id="plAll">Mark all paid</button></div>
+  <div class="plhead"><h2 id="plTitle" style="margin:0"></h2></div>
+  <div class="plsum" id="plSummary"></div>
+  <div class="plbar"><i id="plBar"></i></div>
+  <div class="actions adminonly"><button class="btn primary" type="button" id="plAll" data-i="markAll"></button></div>
   <div id="plList"></div>
-  <details class="adminonly" id="plPasteBox" style="margin-top:12px"><summary style="cursor:pointer;font-weight:700;font-size:13px">Paste an updated sign-up message</summary>
-    <textarea id="plPaste" style="min-height:110px;margin-top:8px" placeholder="Paste the message. New names are added, and names with a ✅ are marked as paid."></textarea>
+  <details class="adminonly" id="plPasteBox" style="margin-top:12px"><summary data-i="pasteSummary"></summary>
+    <textarea id="plPaste" style="min-height:110px;margin-top:8px" data-ph="pastePh"></textarea>
     <div class="hint" id="plPState"></div>
-    <button class="btn primary" type="button" id="plPasteGo" style="margin-top:8px">Update from message</button></details>
-  <form class="addp adminonly" id="plAdd"><input id="plName" placeholder="Add a player (name)" maxlength="60"><button class="btn" type="submit">Add</button></form>
-  <div class="dlgactions"><button class="btn primary" type="button" id="plClose">Close</button></div>
+    <button class="btn primary" type="button" id="plPasteGo" style="margin-top:8px" data-i="pasteGo"></button></details>
+  <form class="addp adminonly" id="plAdd"><input id="plName" data-ph="addPh" maxlength="60"><button class="btn" type="submit" data-i="add"></button></form>
+  <div class="dlgactions"><button class="btn primary" type="button" id="plClose" data-i="close"></button></div>
 </dialog>
 
-<dialog id="viewDlg"><h2>Photo / receipt</h2><div class="receipt" id="viewBody"></div><div class="dlgactions"><button class="btn primary" type="button" id="closeView">Close</button></div></dialog>
+<dialog id="viewDlg"><h2 data-i="viewTitle"></h2><div class="receipt" id="viewBody"></div><div class="dlgactions"><button class="btn primary" type="button" id="closeView" data-i="close"></button></div></dialog>
 
 <dialog id="setDlg">
-  <h2>Settings</h2>
+  <h2 data-i="settings"></h2>
   <form id="setForm" novalidate>
-    <div class="field"><label for="s_cash">Starting money (IDR)</label><input id="s_cash" type="number" min="0" step="1"><div class="hint">Money the club had before using this app.</div></div>
-    <div class="field"><label for="s_balls">Starting shuttlecocks</label><input id="s_balls" type="number" min="0" step="1"><div class="hint">Shuttlecocks in stock before using this app (1 tube = 12).</div></div>
-    <div class="field"><label for="s_fee">Price per player (IDR)</label><input id="s_fee" type="number" min="0" step="1"><div class="hint">Used to work out money collected from the players marked as paid.</div></div>
-    <div class="dlgactions"><button class="btn primary" type="submit">Save settings</button><button class="btn" type="button" id="closeSet">Close</button></div>
+    <div class="field"><label for="s_cash" data-i="sCash"></label><input id="s_cash" type="number" min="0" step="1"><div class="hint" data-i="sCashHint"></div></div>
+    <div class="field"><label for="s_balls" data-i="sBalls"></label><input id="s_balls" type="number" min="0" step="1"><div class="hint" data-i="sBallsHint"></div></div>
+    <div class="field"><label for="s_fee" data-i="sFee"></label><input id="s_fee" type="number" min="0" step="1"><div class="hint" data-i="sFeeHint"></div></div>
+    <div class="dlgactions"><button class="btn primary" type="submit" data-i="sSave"></button><button class="btn" type="button" id="closeSet" data-i="close"></button></div>
   </form>
 </dialog>
 
@@ -172,38 +323,181 @@ body.admin .actions.adminonly{display:flex}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (()=>{'use strict';
-/* ====== PASTE YOUR SUPABASE DETAILS HERE (Supabase → Project Settings → API) ====== */
-const SUPABASE_URL='https://fkpiaegtgwxijzdvwgzj.supabase.co';        // e.g. https://abcdxyz.supabase.co
-const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZrcGlhZWd0Z3d4aWp6ZHZ3Z3pqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQyMDgxNTEsImV4cCI6MjEwOTc4NDE1MX0.RZPUySGWV-v5yuAA7wlkhdTKPeeSbzlQiPqnJufwFM4'; // the "anon public" key (safe to put in a web page)
-/* ================================================================================== */
+/* ====== SUPABASE DETAILS (Supabase → Project Settings → API) ====== */
+const SUPABASE_URL='https://fkpiaegtgwxijzdvwgzj.supabase.co';
+const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZrcGlhZWd0Z3d4aWp6ZHZ3Z3pqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQyMDgxNTEsImV4cCI6MjEwOTc4NDE1MX0.RZPUySGWV-v5yuAA7wlkhdTKPeeSbzlQiPqnJufwFM4';
+/* ================================================================== */
 
+/* ---------- language ---------- */
+const S=(a,b)=>a===1?'':b; // plural helper (English)
+const T={
+id:{
+  tagline:'Setiap Minggu · 16.00–18.00 · Lapangan HU, Batam',
+  login:'Masuk admin',logout:'Keluar',settings:'Pengaturan',
+  preview:'<strong>Mode pratinjau.</strong> Ini data Juli–November 2026 yang tersimpan di halaman ini. Perubahan tidak disimpan. Tekan "Masuk admin" untuk mencoba tombol admin.',
+  cashLabel:'Kas sekarang',cashSub:'Uang yang sudah masuk, dikurangi biaya lapangan & bola',
+  owedL:'Belum dibayar',ifAllL:'Kalau semua sudah bayar',people:n=>`${n} orang`,pctPaid:p=>`${p}% sudah masuk`,allPaid:'Semua sudah lunas',
+  sparkCap:d=>`Saldo sejak ${d}`,
+  ballsLabel:'Stok bola',ballsSub:(t,r)=>t?`${t} slop + ${r} bola (1 slop = 12)`:`${r} bola, kurang dari 1 slop`,
+  lowStock:'Stok menipis, waktunya beli bola',negBalls:'Di bawah nol, cek catatan',
+  lastGame:d=>`Main terakhir · ${d}`,noGame:'Belum ada main',lgPlayers:'Pemain',costPP:'Biaya per orang',
+  lgPaid:(p,n)=>`${p} dari ${n} orang sudah bayar`,
+  activity:'Aktivitas',addGame:'＋ Hari main',addCourt:'＋ Bayar lapangan',addShuttle:'＋ Beli bola',
+  thDate:'Tanggal',thAct:'Aktivitas',thPl:'Pemain',thIn:'Uang masuk',thInSub:'sudah bayar / total',thOut:'Uang keluar',thBal:'Saldo akhir',thBalls:'Bola',thCpp:'Biaya/orang',thCppSub:'lapangan + bola',thRc:'Bukti',
+  tGame:'Main',tCourt:'Bayar lapangan',tShuttle:'Beli bola',extra:n=>`${n} lapangan tambahan`,tubes:n=>`${n} slop`,
+  playersBtn:n=>`${n} pemain`,paidTag:'lunas',unpaidN:n=>`${n} belum bayar`,
+  total:'Total',shown:'(yang tampil)',avg:'rata-rata',view:'Lihat',edit:'Ubah',del:'Hapus',
+  costNote:(m,b)=>`<strong>Biaya per orang</strong> = (lapangan member ${m} per lapangan + lapangan tambahan + bola terpakai × harga rata-rata ${b} per bola) ÷ jumlah pemain. Saldo akhir hanya menghitung uang yang sudah dibayar. Main 12 Jul tidak punya data bola, jadi dihitung 0.`,
+  more:n=>`Tampilkan ${n} minggu lagi`,reset:'Kembali ke 5 minggu terakhir',
+  outTitle:'Belum bayar',outNone:'Semua sudah lunas. Mantap!',outTotal:(n,a)=>`${n} orang · ${a}`,
+  paidBtn:'Lunas ✓',allPaidBtn:'Lunas semua',
+  empty:'Belum ada aktivitas.',loading:'Memuat…',loadErr:'Data tidak bisa dimuat.',
+  plTitle:d=>`Pemain · ${d}`,plSum:(p,n,c,o)=>`<strong>${p} dari ${n}</strong> sudah bayar · ${c} masuk`+(o?` · <span class="unp">${o} belum</span>`:''),
+  markAll:'Tandai semua lunas',pasteSummary:'Tempel pesan daftar terbaru',pastePh:'Tempel pesannya. Nama baru ditambahkan, dan nama dengan ✅ ditandai lunas.',
+  pasteGo:'Perbarui dari pesan',addPh:'Tambah pemain (nama)',add:'Tambah',close:'Tutup',
+  cashTag:'tunai',markPaid:'Tandai lunas',paid:'Lunas',unpaid:'Belum bayar',rmTitle:'Hapus dari main ini',
+  found:(n,p)=>`Ditemukan ${n} pemain, ${p} sudah dicentang lunas.`,
+  courtsFound:(c,e)=>` Lapangan ${c}: ${e} tambahan (3 lapangan sudah dibayar bulanan). Mohon dicek.`,
+  previewNotSaved:'Mode pratinjau: tidak disimpan.',markedPaid:n=>n>1?`${n} orang ditandai lunas.`:'Ditandai lunas.',markedUnpaid:'Ditandai belum bayar.',
+  saveErr:'Gagal menyimpan: ',noNames:'Tidak ada nama di pesan itu.',nothingNew:'Tidak ada yang baru di pesan itu.',
+  addedPaid:(a,p)=>`${a} ditambahkan, ${p} ditandai lunas.`,addErr:'Gagal menambah: ',
+  confirmAll:(n,d)=>`Tandai ${n} pemain yang belum bayar sebagai lunas untuk main ${d}?`,
+  confirmRm:(nm,d)=>`Hapus ${nm} dari main ${d}?`,rmErr:'Gagal menghapus: ',
+  confirmDel:d=>`Hapus catatan tanggal ${d}? Ini tidak bisa dibatalkan.`,deleted:'Dihapus.',delErr:'Gagal menghapus: ',
+  loggedOut:'Sudah keluar.',loggedIn:'Masuk sebagai admin.',notAdmin:'Akun ini bukan admin. Minta untuk ditambahkan.',loginFail:'Gagal masuk: ',
+  previewAdmin:'Mode admin pratinjau aktif. Perubahan tidak disimpan.',previewNoEdit:'Mode pratinjau: hubungkan Supabase untuk menambah, mengubah atau menghapus.',
+  settingsSaved:'Pengaturan disimpan.',wholeNums:'Isi angka bulat, 0 atau lebih.',pickDate:'Pilih tanggal.',fillWhole:'Isi angka bulat (tanpa minus atau desimal).',
+  updated:'Diperbarui.',saved:'Tersimpan.',notAdminHint:' (sudah masuk sebagai admin?)',unknownErr:'kesalahan tidak diketahui',
+  loginTitle:'Masuk admin',password:'Kata sandi',loginGo:'Masuk',cancel:'Batal',save:'Simpan',
+  fAdd:'Tambah',fEdit:'Ubah',fGame:'hari main',fCourt:'bayar lapangan',fShuttle:'beli bola',
+  date:'Tanggal',notes:'Catatan (opsional)',photo:'Foto (opsional)',receipt:'Bukti bayar (foto atau PDF)',
+  namesL:'Pemain: tempel pesan daftar dari WhatsApp',namesPh:'Tempel seluruh pesan di sini. Nama dengan ✅ ditandai lunas. Bisa juga ketik satu nama per baris.',
+  optional:'Opsional.',allPaidChk:'Semua sudah bayar',playersNo:'Jumlah pemain (kalau tanpa nama)',collected:'Uang terkumpul (Rp)',onlyNoNames:'Hanya kalau tanpa nama',
+  shuttles:'Bola terpakai',extraCourts:'Lapangan tambahan',extraCost:'Biaya lapangan tambahan (Rp)',zeroIfNone:'Isi 0 kalau tidak ada',
+  managed:'Pemain dan pembayaran diatur lewat tombol pemain di tabel.',amount:'Jumlah dibayar (Rp)',tubesL:'Slop dibeli',tubeHint:'1 slop = 12 bola',
+  newFile:'File baru siap.',remove:'Hapus',fileAttached:'Sudah ada file. Pilih file lain untuk mengganti, atau ',removeIt:'hapus',fileOpt:'Opsional. Ambil foto atau unggah PDF.',
+  pdfBig:'PDF terlalu besar (maks 3 MB).',notImg:'Pilih foto atau PDF.',cantRead:'Gambar tidak bisa dibaca.',
+  viewTitle:'Foto / bukti',openPdf:'Buka PDF',
+  sCash:'Uang awal (Rp)',sCashHint:'Uang klub sebelum memakai aplikasi ini.',sBalls:'Bola awal',sBallsHint:'Stok bola sebelum memakai aplikasi ini (1 slop = 12).',
+  sFee:'Harga per pemain (Rp)',sFeeHint:'Dipakai untuk menghitung uang dari pemain yang sudah lunas.',sSave:'Simpan pengaturan'
+},
+en:{
+  tagline:'Sundays · 4–6 pm · HU courts, Batam',
+  login:'Admin login',logout:'Log out',settings:'Settings',
+  preview:'<strong>Preview mode.</strong> This is the July–November 2026 data built into this page. Changes are not saved. Tap "Admin login" to try the admin buttons.',
+  cashLabel:'Cash in hand',cashSub:'Money received, minus court & shuttlecock costs',
+  owedL:'Not paid yet',ifAllL:'If everyone pays',people:n=>`${n} ${n===1?'person':'people'}`,pctPaid:p=>`${p}% received`,allPaid:'Everyone has paid',
+  sparkCap:d=>`Balance since ${d}`,
+  ballsLabel:'Shuttlecocks in stock',ballsSub:(t,r)=>t?`${t} tube${S(t,'s')} + ${r} (12 per tube)`:`${r} left, less than 1 tube`,
+  lowStock:'Running low, time to buy more',negBalls:'Below zero, check the records',
+  lastGame:d=>`Last game · ${d}`,noGame:'No games yet',lgPlayers:'Players',costPP:'Cost per person',
+  lgPaid:(p,n)=>`${p} of ${n} have paid`,
+  activity:'Activity',addGame:'＋ Game day',addCourt:'＋ Court bill',addShuttle:'＋ Shuttlecock bill',
+  thDate:'Date',thAct:'Activity',thPl:'Players',thIn:'Money in',thInSub:'paid / total',thOut:'Money out',thBal:'Balance after',thBalls:'Balls',thCpp:'Cost per person',thCppSub:'courts + balls',thRc:'Receipt',
+  tGame:'Game day',tCourt:'Court bill',tShuttle:'Shuttlecocks',extra:n=>`${n} extra court${S(n,'s')}`,tubes:n=>`${n} tube${S(n,'s')}`,
+  playersBtn:n=>`${n} players`,paidTag:'paid',unpaidN:n=>`${n} unpaid`,
+  total:'Total',shown:'(shown)',avg:'average',view:'View',edit:'Edit',del:'Delete',
+  costNote:(m,b)=>`<strong>Cost per person</strong> = (member courts at ${m} each + extra courts + balls used × average ball price ${b}) ÷ players. Balance after counts only money already paid. The 12 Jul game has no ball count, so it counts 0 balls.`,
+  more:n=>`Extend ${n} more week${S(n,'s')}`,reset:'Show last 5 weeks only',
+  outTitle:'Outstanding payments',outNone:'Nobody owes anything.',outTotal:(n,a)=>`${n} ${n===1?'person':'people'} · ${a}`,
+  paidBtn:'Paid ✓',allPaidBtn:'All paid',
+  empty:'No activity yet.',loading:'Loading…',loadErr:'Could not load data.',
+  plTitle:d=>`Players · ${d}`,plSum:(p,n,c,o)=>`<strong>${p} of ${n}</strong> paid · ${c} received`+(o?` · <span class="unp">${o} outstanding</span>`:''),
+  markAll:'Mark all paid',pasteSummary:'Paste an updated sign-up message',pastePh:'Paste the message. New names are added, and names with a ✅ are marked as paid.',
+  pasteGo:'Update from message',addPh:'Add a player (name)',add:'Add',close:'Close',
+  cashTag:'cash',markPaid:'Mark paid',paid:'Paid',unpaid:'Unpaid',rmTitle:'Remove from this game',
+  found:(n,p)=>`Found ${n} players, ${p} ticked as paid.`,
+  courtsFound:(c,e)=>` Courts ${c}: ${e} extra (3 are prepaid monthly). Please check.`,
+  previewNotSaved:'Preview only: not saved.',markedPaid:n=>n>1?`${n} marked as paid.`:'Marked as paid.',markedUnpaid:'Marked as unpaid.',
+  saveErr:'Could not save: ',noNames:'No names found in the message.',nothingNew:'Nothing new in that message.',
+  addedPaid:(a,p)=>`${a} added, ${p} marked paid.`,addErr:'Could not add: ',
+  confirmAll:(n,d)=>`Mark all ${n} unpaid players as paid for ${d}?`,
+  confirmRm:(nm,d)=>`Remove ${nm} from the ${d} game?`,rmErr:'Could not remove: ',
+  confirmDel:d=>`Delete this entry from ${d}? This cannot be undone.`,deleted:'Deleted.',delErr:'Could not delete: ',
+  loggedOut:'Logged out.',loggedIn:'Logged in as admin.',notAdmin:'This account is not an admin. Ask to be added.',loginFail:'Login failed: ',
+  previewAdmin:'Admin preview on. Changes are not saved.',previewNoEdit:'Preview only: connect Supabase to add, edit or delete.',
+  settingsSaved:'Settings saved.',wholeNums:'Please enter whole numbers, 0 or more.',pickDate:'Please choose a date.',fillWhole:'Please fill in whole numbers (no negatives or decimals).',
+  updated:'Updated.',saved:'Saved.',notAdminHint:' (are you logged in as admin?)',unknownErr:'unknown error',
+  loginTitle:'Admin login',password:'Password',loginGo:'Log in',cancel:'Cancel',save:'Save',
+  fAdd:'Add',fEdit:'Edit',fGame:'game day',fCourt:'court bill',fShuttle:'shuttlecock bill',
+  date:'Date',notes:'Notes (optional)',photo:'Photo (optional)',receipt:'Receipt (photo or PDF)',
+  namesL:'Players: paste the WhatsApp sign-up message',namesPh:'Paste the whole message here. Names with a ✅ are marked as paid. You can also type one name per line.',
+  optional:'Optional.',allPaidChk:'Everyone has paid',playersNo:'Players (if no names)',collected:'Money collected (Rp)',onlyNoNames:'Only if no names',
+  shuttles:'Shuttlecocks used',extraCourts:'Extra courts',extraCost:'Extra court cost paid (Rp)',zeroIfNone:'0 if none',
+  managed:'Players and payments are managed with the players button in the table.',amount:'Amount paid (Rp)',tubesL:'Tubes bought',tubeHint:'1 tube = 12 shuttlecocks',
+  newFile:'New file ready.',remove:'Remove',fileAttached:'A file is already attached. Choose another to replace it, or ',removeIt:'remove it',fileOpt:'Optional. Take a photo or upload a PDF.',
+  pdfBig:'PDF is too large (max 3 MB).',notImg:'Please choose a photo or a PDF.',cantRead:'Could not read this image.',
+  viewTitle:'Photo / receipt',openPdf:'Open PDF',
+  sCash:'Starting money (Rp)',sCashHint:'Money the club had before using this app.',sBalls:'Starting shuttlecocks',sBallsHint:'Shuttlecocks in stock before using this app (1 tube = 12).',
+  sFee:'Price per player (Rp)',sFeeHint:'Used to work out money collected from players marked as paid.',sSave:'Save settings'
+}};
+let lang='id';try{const v=localStorage.getItem('gm_lang');if(v==='en'||v==='id')lang=v}catch(e){}
+const t=(k,...a)=>{const v=T[lang][k]??T.en[k]??k;return typeof v==='function'?v(...a):v};
+const MON_ID={January:'Januari',February:'Februari',March:'Maret',April:'April',May:'Mei',June:'Juni',July:'Juli',August:'Agustus',September:'September',October:'Oktober',November:'November',December:'Desember'};
+function trNote(s){
+  if(lang!=='id'||!s)return s;
+  return s.replace('Other payment, no description given','Pembayaran lain, tanpa keterangan')
+    .replace(/^Monthly courts:/,'Sewa lapangan bulanan:').replace(/^Courts?\b/,'Lapangan').replace('(assumed)','(perkiraan)')
+    .replace(/\b(\d+) courts\b/g,'$1 lapangan').replace(/\b(\d+) Sundays?\b/g,'$1 Minggu').replace(/\bballs\b/g,'bola')
+    .replace(/\b(January|February|March|April|May|June|July|August|September|October|November|December)\b/g,m=>MON_ID[m]);
+}
+
+/* ---------- helpers ---------- */
 const $=id=>document.getElementById(id);
 const esc=v=>String(v??'').replace(/[&<>"']/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
-const rp=n=>(n<0?'−':'')+'Rp'+Math.abs(Math.round(n)).toLocaleString('id-ID');
+const nf=n=>Math.abs(Math.round(n)).toLocaleString(lang==='id'?'id-ID':'en-US');
+const rp=n=>(n<0?'−':'')+'Rp'+nf(n);
 const pad=n=>String(n).padStart(2,'0');
 const today=()=>{const d=new Date();return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`};
-const prettyDate=v=>{const[y,m,d]=v.split('-').map(Number);return new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'short',year:'numeric'}).format(new Date(y,m-1,d))};
+const loc=()=>lang==='id'?'id-ID':'en-GB';
+const toD=v=>{const[y,m,d]=v.split('-').map(Number);return new Date(y,m-1,d)};
+const prettyDate=v=>new Intl.DateTimeFormat(loc(),{day:'numeric',month:'short',year:'numeric'}).format(toD(v));
+const shortDate=v=>new Intl.DateTimeFormat(loc(),{day:'numeric',month:'short'}).format(toD(v));
 const isInt=(n,min=0)=>Number.isSafeInteger(n)&&n>=min;
-let toastT;const toast=m=>{const e=$('toast');e.textContent=m;e.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>e.classList.remove('show'),4000)};
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let toastT;const toast=m=>{const e=$('toast');e.textContent=m;e.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>e.classList.remove('show'),3800)};
+function countTo(el,to,fmt){
+  const from=el._v??0;el._v=to;
+  if(reduce||from===to){el.textContent=fmt(to);return}
+  const t0=performance.now(),dur=900;cancelAnimationFrame(el._raf);
+  const step=now=>{const k=Math.min(1,(now-t0)/dur),e=1-Math.pow(1-k,3);el.textContent=fmt(from+(to-from)*e);if(k<1)el._raf=requestAnimationFrame(step)};
+  el._raf=requestAnimationFrame(step);
+}
+const initials=n=>{const w=n.replace(/[()]/g,' ').trim().split(/\s+/).filter(Boolean);return ((w[0]||'?')[0]+(w[1]&&/^[a-z]/i.test(w[1])?w[1][0]:(w[0]||'')[1]||'')).toUpperCase()};
 
 const configured=/^https:\/\/.+\.supabase\.(co|in)/.test(SUPABASE_URL)&&SUPABASE_ANON_KEY.length>40&&window.supabase;
 const preview=!configured;
-if(preview){$('setupMsg').hidden=false}
 const sb=configured?window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY):null;
 
-let weeks=5;
-let items=[],settings={openingCash:0,openingShuttles:0,fee:30000},isAdmin=false;
+let weeks=5,animRows=true,animFrom=0;
+let items=[],settings={openingCash:0,openingShuttles:0,fee:30000},isAdmin=false,loaded=false;
 const paidN=x=>x.attendees.filter(a=>a.paid).length;
 const hasList=x=>x.attendees.length>0;
 const gPlayers=x=>hasList(x)?x.attendees.length:x.players;
 const gCollected=x=>hasList(x)?paidN(x)*settings.fee:x.collected;
+const gTotal=x=>hasList(x)?x.attendees.length*settings.fee:x.collected;
 const SEED={"openingCash":1591000,"openingShuttles":27,"fee":30000,"entries":[{"type":"game","date":"2026-07-12","players":26,"collected":780000,"shuttles":0,"extraCourts":2,"extraCost":220000,"notes":"Courts 2,3,4,5","attendees":[["Raymond",1,0],["Thao",1,0],["Darwin",1,0],["Elvi",1,0],["Jacky",1,0],["Irvan",1,0],["Kelvin",1,0],["Caterine",1,0],["Marcel",1,0],["Sylvia",1,0],["Jonathan",1,0],["edy",1,0],["anggar",1,0],["alamsyah",1,0],["Dmitri",1,0],["Wellson",1,0],["Reynaldo",1,0],["jambin",1,0],["wellson 2",1,0],["win 2",1,0],["win 3",1,0],["wallace",1,0],["Jaysen",1,0],["Frido",1,0],["Ric",1,0],["St",1,0]]},{"type":"game","date":"2026-07-19","players":28,"collected":840000,"shuttles":19,"extraCourts":2,"extraCost":220000,"notes":"Courts 2,3,4,5","attendees":[["Raymond",1,0],["Thao",1,0],["Darwin",1,0],["Elvi",1,0],["Jacky",1,0],["Niclos",1,0],["Jonathan Wijaya",1,0],["Eric",1,0],["cete",1,0],["Irvan",1,0],["Step",1,0],["Kelvin",1,0],["alamsyah",1,0],["Kennedy",1,0],["denny",1,0],["jaysen",1,0],["wilsen",1,0],["jambin",1,0],["bob",1,0],["bob 2",1,0],["Valerian ( Irvan )",1,0],["Charles (Jonathan)",1,0],["Wilsen (Jonathan)",1,0],["Hen",1,0],["Patria (jacky)",1,0],["Wallace",1,0],["Wellson",1,0],["son",1,0]]},{"type":"game","date":"2026-07-26","players":26,"collected":780000,"shuttles":17,"extraCourts":2,"extraCost":220000,"notes":"Courts 2,3,4,5","attendees":[["Darwin",1,0],["Jacky",1,0],["Raymond",1,0],["Samajivata",1,0],["Marcelina",1,0],["Brian",1,0],["Caterine",1,0],["Jonathan W",1,0],["Irvan",1,0],["Kelvin (Irvan)",1,0],["Ahau (Irvan)",1,0],["Patria(Jacky)",1,0],["Jerry",1,0],["Wellson",1,0],["Jambin",1,0],["Rey",1,0],["Niclos",1,0],["Elvi",1,0],["Thao",1,0],["hendru",1,1],["Jaysen",1,0],["Asep",1,0],["Wilson",1,0],["wendra",1,0],["Asep 2",1,0],["yoga (jacky)",1,0]]},{"type":"game","date":"2026-08-02","players":34,"collected":1020000,"shuttles":18,"extraCourts":2,"extraCost":220000,"notes":"Courts 1,2,3,4,5","attendees":[["Raymond",1,0],["Thao",1,0],["Darwin",1,0],["Elvi",1,0],["Jacky",1,0],["Jonathan",1,0],["Steph",1,0],["Irvan",1,0],["Niclos",1,0],["Mimi",1,0],["Steven",1,0],["Samajivata",1,0],["Pin",1,0],["Yoga (Jacky)",1,0],["Patria (Jacky)",1,0],["Jes",1,0],["Jes1",1,0],["Rey",1,0],["Wellson",1,0],["jerry",1,0],["wellson 2",1,0],["Martyn",1,0],["Indro",1,0],["wallace",1,0],["edy",1,0],["anggar",1,0],["bernad",1,0],["felix",1,0],["Jaysen",1,1],["Kennedy",1,0],["Asep",1,0],["ct",1,0],["asen",1,0],["wilson",1,0]]},{"type":"game","date":"2026-08-09","players":17,"collected":510000,"shuttles":12,"extraCourts":0,"extraCost":0,"notes":"Courts 3,4,5 (assumed)","attendees":[["Raymond",1,0],["Thao",1,0],["Rey",1,0],["Elvi",1,0],["Jacky",1,0],["Samajivata",1,0],["Jonathan W",1,0],["Jerry",1,0],["Vivien",1,0],["Marcel",1,0],["Caterine",1,0],["Wellson",1,0],["Wellson 2",1,0],["Jambin",1,0],["Patria",1,0],["Irvan",1,0],["Wilson",1,0]]},{"type":"game","date":"2026-08-16","players":29,"collected":870000,"shuttles":17,"extraCourts":2,"extraCost":220000,"notes":"Courts 2,3,4,5,6","attendees":[["Elvi",1,0],["Jacky",1,0],["Darwin",1,0],["jess",1,0],["jess 2",1,0],["jess 3",1,0],["jess 4",1,0],["jess 5",1,0],["jess 6",1,0],["Raymond",1,0],["Thao",1,0],["Ken",1,0],["Caterine",1,0],["Marcellina",1,0],["Darwin 2",1,0],["Patria",1,0],["Winda",1,0],["Irvan",1,0],["Jaysen",1,0],["Vivien",1,0],["Yoga",1,0],["Ahsan Malaysia",1,0],["WY",1,0],["Wellson",1,0],["son",1,0],["Asep",1,0],["teman Asep",1,0],["Ryan",1,0],["Jozua",1,0]]},{"type":"game","date":"2026-08-23","players":20,"collected":600000,"shuttles":13,"extraCourts":0,"extraCost":0,"notes":"Courts 2,3,4","attendees":[["Darwin",1,0],["Wilianto",1,0],["jambin",1,0],["Irvan",1,0],["Ryan",1,0],["caterine",1,0],["marcel",1,0],["owen",1,0],["Jerry",1,0],["Jonathan W",1,0],["jess",1,0],["jess 2",1,0],["jess 3",1,0],["jess 4",1,0],["jess 5",1,0],["wilson",1,0],["Samajivata",1,0],["Wellson",1,0],["Justin",1,0],["Jozua",1,0]]},{"type":"game","date":"2026-08-30","players":26,"collected":780000,"shuttles":16,"extraCourts":1,"extraCost":110000,"notes":"Courts 2,3,4,5","attendees":[["Raymond",1,0],["Darwin",1,0],["Jonathan W",1,0],["Irvan",1,0],["Kelvin",1,0],["mikael",1,0],["jess",1,0],["jess 2",1,0],["jess 3",1,0],["jess 4",1,0],["jess 5",1,0],["jess 6",1,0],["Kennedy",1,0],["marcel",1,0],["caterine",1,0],["brian",1,0],["Patria",1,1],["Alam",1,0],["Martyn",1,0],["Indro",1,0],["St",1,0],["jambin",1,0],["Jerry",1,0],["Johan",1,0],["Jaysen",1,1],["wendra",1,0]]},{"type":"game","date":"2026-09-06","players":27,"collected":810000,"shuttles":19,"extraCourts":1,"extraCost":110000,"notes":"Courts 3,4,5,6","attendees":[["Darwin",1,0],["Elvi",1,0],["Irvan",1,0],["Samajivata",1,0],["Jonathan W",1,0],["KC",1,0],["jess",1,0],["jess 2",1,0],["Jerry",1,0],["marcel",1,0],["sylvia",1,0],["brian",1,0],["robert",1,0],["jess 3",1,0],["darwin 2",1,0],["darwin 3",1,0],["dendi",1,0],["Wellson",1,0],["wil",1,0],["Mike",1,0],["St",1,0],["Ric",1,0],["wendra",1,0],["sepsep",1,0],["siong",1,0],["siong 2",1,0],["marcel2",1,0]]},{"type":"game","date":"2026-09-13","players":20,"collected":600000,"shuttles":13,"extraCourts":0,"extraCost":0,"notes":"Courts 3,4,5","attendees":[["Wallace",1,0],["Elvi",1,0],["Jonathan",1,0],["Jacky",1,0],["Irvan",1,0],["Nicky",1,0],["jes",1,0],["Kennedy",1,0],["Okta",1,0],["KC",1,0],["Caterine",1,0],["Ryan",1,0],["alam",1,0],["Ahao",1,0],["elvi 2",1,0],["elvi 3",1,0],["Vincent (Jonathan)",1,0],["Kelvin (Jonathan)",1,0],["Ric",1,0],["St",1,0]]},{"type":"game","date":"2026-09-20","players":26,"collected":780000,"shuttles":16,"extraCourts":1,"extraCost":110000,"notes":"Courts 2,3,4,5","attendees":[["Darwin",1,0],["Jacky",1,0],["Okta",1,0],["Jonathan WIjaya",1,0],["Patria",1,0],["Caterine",1,0],["Marcellina Victoria",1,0],["Nicky",1,0],["Irvan",1,0],["syl",1,0],["syl2",1,0],["syl 3",1,0],["brian",1,0],["owen",1,0],["Ric",1,0],["St",1,0],["alam",1,0],["KC",1,0],["jes",1,0],["hendru",1,0],["wendra",1,0],["jambin",1,0],["syl 4",1,0],["Charles",1,0],["jaysen",1,0],["Hen",1,0]]},{"type":"game","date":"2026-09-27","players":18,"collected":540000,"shuttles":16,"extraCourts":0,"extraCost":0,"notes":"Courts 2,3,4","attendees":[["Darwin",1,0],["Jacky",1,0],["Elvi",1,0],["Samajivata",1,0],["Jonathan Wijaya",1,0],["jess",1,0],["jess 2",1,0],["jess 3",1,0],["jess 4",1,0],["jess 5",1,0],["jess 6",1,0],["alam",1,0],["irvan",1,0],["KC",1,0],["Hen",1,0],["jess 7",1,0],["Ric",1,0],["St",1,0]]},{"type":"game","date":"2026-10-04","players":23,"collected":690000,"shuttles":18,"extraCourts":0,"extraCost":0,"notes":"Courts 3,4,5","attendees":[["Darwin",1,0],["Jacky",1,0],["Elvi",1,0],["Jess 6",1,0],["Gorby (Eric)",1,0],["Jess",1,0],["Jess 2",1,0],["Kennedy",1,0],["Patria",1,0],["Jess 3",1,0],["KC",1,0],["Ric",1,0],["Jess 4",1,0],["Jess 5",1,0],["Hen",1,0],["ct",1,0],["karren",1,0],["Jaysen",1,0],["febri",1,0],["okta",1,0],["St",1,0],["hansen",1,0],["temen eric",1,0]]},{"type":"game","date":"2026-10-11","players":19,"collected":570000,"shuttles":13,"extraCourts":0,"extraCost":0,"notes":"Courts 3,4,5","attendees":[["Darwin",1,0],["Jacky",1,0],["Elvi",1,0],["Samajivata",1,0],["Jonathan W",1,0],["Patria",1,0],["jambin",1,0],["Hen",1,0],["Jerry",1,0],["wellson",1,0],["jess",1,0],["jess2",1,0],["KC",1,0],["acen",1,0],["Dennis Ganz",1,0],["wilson",1,0],["hendru",1,0],["wellson 2",1,0],["wendra",1,0]]},{"type":"game","date":"2026-10-18","players":25,"collected":750000,"shuttles":11,"extraCourts":1,"extraCost":110000,"notes":"Courts 3,4,5,6","attendees":[["Darwin",1,0],["Jacky",1,0],["Elvi",1,0],["Raymond",1,0],["Irvan",1,0],["wendra",1,0],["Samajivata",1,0],["Jessen",1,0],["Patria",1,0],["okta",1,0],["Kennedy",1,0],["Nicky",1,0],["hendru",1,0],["kc",1,0],["jess",1,0],["acen",1,0],["jess 2",1,0],["Indro",1,0],["Martyn",1,0],["jambin",1,0],["wallace",1,0],["wanto",1,0],["David",1,0],["Nando (Eric)",1,0],["Ric+",1,0]]},{"type":"game","date":"2026-10-25","players":20,"collected":600000,"shuttles":12,"extraCourts":0,"extraCost":0,"notes":"Courts 3,4,5","attendees":[["Darwin",1,0],["Jacky",1,0],["Thao",1,0],["Raymond",1,0],["Elvi",1,0],["Charles",1,0],["samajivata",1,0],["Irvan",1,0],["Tresia",1,0],["W Jonathan",1,0],["Hen",1,0],["Patria",1,0],["Jesen",1,0],["KC",1,0],["Jordy",1,0],["acen",1,0],["austin",1,0],["alam",1,0],["Wellson",1,0],["jambin",1,0]]},{"type":"game","date":"2026-11-01","players":20,"collected":600000,"shuttles":21,"extraCourts":0,"extraCost":0,"notes":"Courts 3,4,5","attendees":[["Irvan",1,0],["Jacky",1,0],["Thao",1,0],["Raymond",1,0],["Jessen",1,0],["Tresia",1,0],["Jonathan W",1,0],["Patria",1,0],["jambin",1,0],["Hen",1,0],["Kennedy",1,0],["Jason",1,0],["Mike",1,0],["kc",1,0],["wallace",1,0],["acen",1,0],["hendru",1,0],["Jaysen",1,0],["Cagar (hendru)",1,0],["Vale (Jonathan)",1,0]]},{"type":"game","date":"2026-11-08","players":31,"collected":420000,"shuttles":21,"extraCourts":2,"extraCost":220000,"notes":"Courts 2,3,4,5,6","attendees":[["Raymond",0,0],["Thao",0,0],["Darwin",1,0],["Elvi",0,0],["Jacky",1,0],["Winda",1,0],["Irvan",1,0],["Tresia",1,0],["jess",0,0],["jess2",0,0],["Hen",0,0],["win 2 ( Cindy)",1,0],["win3 (Ella)",1,0],["win4 (Jovin)",1,1],["Jonathan",1,0],["Jesen",0,0],["Mike",0,0],["Jason",0,0],["KC",0,0],["Wendra",1,0],["acen",0,0],["Patria",0,0],["josh",0,0],["oscar",0,0],["rijal",0,0],["Ric",1,0],["win5 (Klif)",1,1],["wallace",1,0],["maria",0,0],["maria 2",0,0],["Ricky",1,0]]},{"type":"shuttle","date":"2026-07-19","tubes":5,"amount":1000000,"notes":"Alpha, 5 slop"},{"type":"court","date":"2026-07-20","amount":25000,"notes":"Other payment, no description given"},{"type":"court","date":"2026-07-31","amount":1500000,"notes":"Monthly courts: August: 3 courts × 5 Sundays"},{"type":"shuttle","date":"2026-08-17","tubes":6,"amount":1230000,"notes":"6 slop (72 balls) × Rp205K"},{"type":"court","date":"2026-08-31","amount":1200000,"notes":"Monthly courts: September: 3 courts × 4 Sundays"},{"type":"shuttle","date":"2026-09-20","tubes":5,"amount":1025000,"notes":"Alpha yellow, 5 slop"},{"type":"court","date":"2026-09-29","amount":1200000,"notes":"Monthly courts: October: 3 courts × 4 Sundays"},{"type":"shuttle","date":"2026-10-09","tubes":5,"amount":1025000,"notes":"5 slop"},{"type":"court","date":"2026-10-29","amount":1500000,"notes":"Monthly courts: November: 3 courts × 5 Sundays"}]};
 function loadSeed(){
   settings={openingCash:SEED.openingCash,openingShuttles:SEED.openingShuttles,fee:SEED.fee};
   items=SEED.entries.map((e,i)=>({id:'e'+i,type:e.type,date:e.date,notes:e.notes||'',receipt:null,players:e.players||0,collected:e.collected||0,shuttles:e.shuttles||0,extraCourts:e.extraCourts||0,extraCost:e.extraCost||0,tubes:e.tubes||0,amount:e.amount||0,
     attendees:(e.attendees||[]).map((a,j)=>({id:'e'+i+'a'+j,name:a[0],paid:!!a[1],cash:!!a[2],paid_on:null}))}));
-  items.sort((a,b)=>a.date<b.date?1:a.date>b.date?-1:0);
+  items.sort((a,b)=>a.date<b.date?1:a.date>b.date?-1:0);loaded=true;
 }
+
+/* ---------- static text ---------- */
+function applyLang(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll('[data-i]').forEach(e=>e.textContent=t(e.dataset.i));
+  document.querySelectorAll('[data-ph]').forEach(e=>e.placeholder=t(e.dataset.ph));
+  document.querySelectorAll('[data-lang]').forEach(b=>b.classList.toggle('on',b.dataset.lang===lang));
+  $('setupMsg').innerHTML=t('preview');
+  $('authBtn').textContent=isAdmin?t('logout'):t('login');
+  if(!loaded)$('empty').textContent=t('loading');
+}
+document.querySelectorAll('[data-lang]').forEach(b=>b.onclick=()=>{
+  if(lang===b.dataset.lang)return;lang=b.dataset.lang;try{localStorage.setItem('gm_lang',lang)}catch(e){}
+  applyLang();render();if($('plDlg').open)renderPlayers();
+});
 
 /* ---------- loading ---------- */
 const fromRow=r=>({id:r.id,type:r.type,date:r.date,notes:r.notes||'',receipt:r.receipt_path||null,
@@ -212,87 +506,129 @@ async function loadAll(){
   const [e,s,at]=await Promise.all([
     sb.from('entries').select('*').order('date',{ascending:false}).order('created_at',{ascending:false}).limit(5000),
     sb.from('settings').select('*').eq('id',1).maybeSingle(),
-    sb.from('attendees').select('*').order('created_at',{ascending:true}).limit(20000)]);
-  if(e.error||s.error||at.error){toast('Could not load data. Check the setup (setup.sql run? keys correct?).');$('empty').textContent='Could not load data.';return}
+    sb.from('attendees').select('*').order('pos',{ascending:true}).order('created_at',{ascending:true}).order('id',{ascending:true}).limit(20000)]);
+  if(e.error||s.error||at.error){toast(t('loadErr'));$('empty').textContent=t('loadErr');return}
   items=e.data.map(fromRow);
   const byId=new Map(items.map(x=>[x.id,x]));
   for(const a of at.data){const x=byId.get(a.entry_id);if(x)x.attendees.push({id:a.id,name:a.name,paid:a.paid,cash:a.cash,paid_on:a.paid_on})}
   if(s.data)settings={openingCash:Number(s.data.opening_cash),openingShuttles:Number(s.data.opening_shuttles),fee:Number(s.data.fee??30000)};
-  render();
+  loaded=true;render();
 }
 async function refreshAdmin(){
   const {data:{session}}=await sb.auth.getSession();
   isAdmin=false;
   if(session){const {data,error}=await sb.rpc('is_admin');isAdmin=!error&&data===true;
-    if(!isAdmin){toast('This account is not an admin. Ask to be added.');await sb.auth.signOut()}}
+    if(!isAdmin){toast(t('notAdmin'));await sb.auth.signOut()}}
   document.body.classList.toggle('admin',isAdmin);
-  $('authBtn').textContent=isAdmin?'Log out':'Admin login';
+  $('authBtn').textContent=isAdmin?t('logout'):t('login');
   render();
 }
 
 /* ---------- render ---------- */
 const photoUrl=p=>sb.storage.from('receipts').getPublicUrl(p).data.publicUrl;
 const MEMBER_COURT=100000; // prepaid member court, per court per Sunday
-function courtCount(t){const m=String(t||'').match(/Courts?\s*([\d,\s\-&]+)/i);if(!m)return null;let n=0;
+function courtCount(s){const m=String(s||'').match(/(?:Courts?|Lapangan)\s*([\d,\s\-&]+)/i);if(!m)return null;let n=0;
   for(const p of m[1].split(/[,&]/)){const r=p.trim().match(/^(\d+)\s*-\s*(\d+)$/);if(r)n+=+r[2]-+r[1]+1;else if(/^\d+$/.test(p.trim()))n++}return n||null}
 function moneyIn(x){
   if(!hasList(x))return `<span class="in">${rp(x.collected)}</span>`;
-  const n=x.attendees.length,p=paidN(x),paid=p*settings.fee,total=n*settings.fee;
-  return p===n?`<span class="in">${rp(paid)}</span> <small style="display:inline">(paid)</small>`
-    :`<span class="in">${rp(paid)}</span> / ${rp(total)}<small class="unp">${n-p} unpaid</small>`;
+  const n=x.attendees.length,p=paidN(x);
+  return p===n?`<span class="in">${rp(p*settings.fee)}</span><span class="paidtag">${t('paidTag')}</span>`
+    :`<span class="in">${rp(p*settings.fee)}</span> / ${rp(n*settings.fee)}<small class="unp">${t('unpaidN',n-p)}</small>`;
+}
+function spark(points,firstDate){
+  const svg=$('spark');svg.querySelectorAll('path').forEach(p=>p.remove());
+  if(points.length<2){$('sparkCap').textContent='';return}
+  const W=150,H=46,mn=Math.min(...points),mx=Math.max(...points),rg=mx-mn||1;
+  const xy=points.map((v,i)=>[i/(points.length-1)*W,H-4-(v-mn)/rg*(H-8)]);
+  const d=xy.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
+  const ns='http://www.w3.org/2000/svg';
+  const a=document.createElementNS(ns,'path');a.setAttribute('class','a');a.setAttribute('d',d+` L${W} ${H} L0 ${H} Z`);svg.appendChild(a);
+  const l=document.createElementNS(ns,'path');l.setAttribute('class','l');l.setAttribute('d',d);l.setAttribute('vector-effect','non-scaling-stroke');svg.appendChild(l);
+  l.style.setProperty('--len',Math.ceil(l.getTotalLength()+2));
+  $('sparkCap').textContent=t('sparkCap',shortDate(firstDate));
 }
 function render(){
-  let cash=settings.openingCash,balls=settings.openingShuttles,players=0,inn=0,out=0;
-  for(const x of items){
-    if(x.type==='game'){const pl=gPlayers(x),co=gCollected(x);cash+=co-x.extraCost;balls-=x.shuttles;players+=pl;inn+=co;out+=x.extraCost}
-    else if(x.type==='court'){cash-=x.amount;out+=x.amount}
-    else{cash-=x.amount;balls+=x.tubes*12;out+=x.amount}
+  // totals, oldest first (bills before the game on the same day)
+  const asc=[...items].sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:((a.type==='game')-(b.type==='game')));
+  let cash=settings.openingCash,balls=settings.openingShuttles;const bal=new Map(),line=[cash];
+  for(const x of asc){
+    if(x.type==='game'){cash+=gCollected(x)-x.extraCost;balls-=x.shuttles}
+    else{cash-=x.amount;if(x.type==='shuttle')balls+=x.tubes*12}
+    bal.set(x.id,cash);line.push(cash);
   }
-  $('cash').textContent=rp(cash);$('cash').classList.toggle('neg',cash<0);
-  $('balls').textContent=balls.toLocaleString('en-US');$('balls').classList.toggle('neg',balls<0);
-  const owed=items.reduce((n,x)=>n+(x.attendees.length-paidN(x)),0)*settings.fee;
-  $('cashSub').textContent='Collected − court & shuttlecock spending'+(owed?` · ${rp(owed)} still to collect`:'');
-  $('ballsSub').textContent=balls<0?'Below zero — check the records':`about ${Math.floor(balls/12)} tubes (12 per tube)`;
-  $('empty').hidden=items.length>0;$('empty').textContent='No activity yet.';
+  const owedPeople=new Set();let owedN=0;
+  for(const x of items)for(const a of x.attendees)if(!a.paid){owedN++;owedPeople.add(a.name.trim().toLowerCase())}
+  const owed=owedN*settings.fee,ifAll=cash+owed;
+  const cashEl=$('cash');countTo(cashEl,cash,rp);cashEl.classList.toggle('neg',cash<0);
+  countTo($('owed'),owed,rp);countTo($('ifAll'),ifAll,rp);
+  $('owedWho').textContent=owed?t('people',owedPeople.size):t('allPaid');
+  const pct=ifAll>0?Math.max(0,Math.min(100,cash/ifAll*100)):100;
+  $('pctPaid').textContent=t('pctPaid',Math.floor(pct));
+  requestAnimationFrame(()=>$('cashBar').style.width=pct+'%');
+  spark(line,asc.length?asc[0].date:today());
+
+  const ballsEl=$('balls');countTo(ballsEl,balls,v=>Math.round(v).toLocaleString(lang==='id'?'id-ID':'en-US'));ballsEl.classList.toggle('neg',balls<0);
+  $('ballsSub').textContent=balls<0?t('negBalls'):t('ballsSub',Math.floor(balls/12),balls%12);
+  const nt=Math.max(1,Math.min(8,Math.ceil(Math.max(0,balls)/12)));let tb='';
+  for(let i=0;i<nt;i++){const f=Math.max(0,Math.min(12,balls-i*12));tb+='<div class="tube">'+Array.from({length:12},(_,j)=>`<s class="${j<f?'f':''}"></s>`).join('')+'</div>'}
+  $('tubes').innerHTML=tb;
+  $('ballsWarn').innerHTML=balls>=0&&balls<24?`<span class="warn">${t('lowStock')}</span>`:'';
+
+  // shuttle price + cost per person
+  const shut=items.filter(x=>x.type==='shuttle'),bq=shut.reduce((n,x)=>n+x.tubes*12,0),ballCost=bq?shut.reduce((n,x)=>n+x.amount,0)/bq:0;
+  const costOf=x=>{const cc=courtCount(x.notes),mem=Math.max(0,(cc??(3+x.extraCourts))-x.extraCourts);return mem*MEMBER_COURT+x.extraCost+x.shuttles*ballCost};
+  const courtOf=x=>{const cc=courtCount(x.notes),mem=Math.max(0,(cc??(3+x.extraCourts))-x.extraCourts);return mem*MEMBER_COURT+x.extraCost};
+
+  // last game card
+  const lg=items.filter(x=>x.type==='game').sort((a,b)=>a.date<b.date?1:-1)[0];
+  if(lg){
+    const n=gPlayers(lg),p=hasList(lg)?paidN(lg):n,fr=n?p/n:1;
+    $('lgLabel').textContent=t('lastGame',prettyDate(lg.date));
+    $('lgPlayers').textContent=n;$('lgCost').textContent=rp(costOf(lg)/(n||1));
+    $('ringTxt').textContent=Math.round(fr*100)+'%';
+    requestAnimationFrame(()=>$('ringFg').style.strokeDashoffset=(213.6*(1-fr)).toFixed(1));
+    $('lgPaid').textContent=t('lgPaid',p,n);
+  }else{$('lgLabel').textContent=t('noGame')}
+
+  $('empty').hidden=items.length>0;if(loaded)$('empty').textContent=t('empty');
   renderOutstanding();
+
+  // table: last N weeks
   const gd=[...new Set(items.filter(x=>x.type==='game').map(x=>x.date))].sort().reverse();
   const cutoff=gd.length<=weeks?null:gd[weeks-1];
-  const vis=cutoff?items.filter(x=>x.date>=cutoff):items;
-  const more=Math.max(0,gd.length-weeks),tb=$('toggleAll');
-  tb.hidden=more===0;tb.textContent=`Extend ${Math.min(4,more)} more week${Math.min(4,more)>1?'s':''}`;
+  const vis=asc.filter(x=>!cutoff||x.date>=cutoff).reverse();
+  const more=Math.max(0,gd.length-weeks),mb=$('moreBtn');
+  mb.hidden=more===0;mb.textContent=t('more',Math.min(4,more));
   $('resetWeeks').hidden=weeks<=5;
-  // running balance, oldest first (bills are counted before the game on the same day)
-  const asc=[...items].sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:((a.type==='game')-(b.type==='game')));
-  const bal=new Map();let run=settings.openingCash;
-  for(const x of asc){run+=x.type==='game'?gCollected(x)-x.extraCost:-x.amount;bal.set(x.id,run)}
-  const shut=items.filter(x=>x.type==='shuttle'),ballCost=shut.reduce((n,x)=>n+x.tubes*12,0)?shut.reduce((n,x)=>n+x.amount,0)/shut.reduce((n,x)=>n+x.tubes*12,0):0;
-  const costOf=x=>{const cc=courtCount(x.notes),mem=Math.max(0,(cc??(3+x.extraCourts))-x.extraCourts);return {court:mem*MEMBER_COURT+x.extraCost,balls:x.shuttles*ballCost}};
-  $('costNote').innerHTML=`<strong>Cost per person</strong> = (member courts at ${rp(MEMBER_COURT)} each + extra courts + balls used × average ball price ${rp(ballCost)}) ÷ players. Balance after counts only what has been paid so far. A game with unknown balls used (12 Jul) counts 0 balls.`;
-  const vis2=asc.filter(x=>vis.includes(x)).reverse();
+  $('costNote').innerHTML=t('costNote',rp(MEMBER_COURT),rp(ballCost));
   let tp=0,ti=0,tt=0,to=0,tc=0;
-  for(const x of vis2){if(x.type==='game'){tp+=gPlayers(x);ti+=gCollected(x);tt+=hasList(x)?x.attendees.length*settings.fee:x.collected;to+=x.extraCost;const c=costOf(x);tc+=c.court+c.balls}else to+=x.amount}
-  $('rows').innerHTML=vis2.map(x=>{
-    let act,pl='',mi='',mo='',sb2='',cp='';
+  for(const x of vis){if(x.type==='game'){tp+=gPlayers(x);ti+=gCollected(x);tt+=gTotal(x);to+=x.extraCost;tc+=costOf(x)}else to+=x.amount}
+  const icon='<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="6" cy="5" r="2.5"/><path d="M1.5 14c0-2.5 2-4.5 4.5-4.5s4.5 2 4.5 4.5"/><circle cx="11.5" cy="5.5" r="2"/><path d="M11.5 9.5c1.8 0 3 1.4 3 3.5"/></svg>';
+  $('rows').innerHTML=vis.map((x,i)=>{
+    let act,pl='',mi='',mo='–',bb='',cp='';
     if(x.type==='game'){
-      act=`Game day${x.extraCourts?`<small>${x.extraCourts} extra court${x.extraCourts>1?'s':''}</small>`:''}`;
-      const unp=x.attendees.length-paidN(x);
-      pl=hasList(x)?`<button class="btn sm" type="button" data-players="${esc(x.id)}">${gPlayers(x)} players</button>`:gPlayers(x);
-      mi=moneyIn(x);{const c=costOf(x),p=gPlayers(x)||1;cp=`<strong>${rp((c.court+c.balls)/p)}</strong><small>${rp(c.court/p)} + ${rp(c.balls/p)}</small>`}mo=x.extraCost?`<span class="out">${rp(x.extraCost)}</span>`:'–';sb2=`−${x.shuttles}`;
-    }else if(x.type==='court'){act='Court bill';mo=`<span class="out">${rp(x.amount)}</span>`}
-    else{act=`Shuttlecock bill<small>${x.tubes} tube${x.tubes>1?'s':''}</small>`;mo=`<span class="out">${rp(x.amount)}</span>`;sb2=`+${x.tubes*12}`}
-    if(x.notes)act+=`<small>${esc(x.notes)}</small>`;
-    const rc=x.receipt?`<button class="btn sm" type="button" data-view="${esc(x.receipt)}">View</button>`:'<span style="color:#aab8b1">–</span>';
-    const adm=isAdmin?`<td style="white-space:nowrap"><button class="btn sm" type="button" data-edit="${esc(x.id)}">Edit</button> <button class="btn sm danger" type="button" data-del="${esc(x.id)}">Delete</button></td>`:'';
-    return `<tr><td style="white-space:nowrap">${prettyDate(x.date)}</td><td>${act}</td><td class="num">${pl}</td><td class="num">${mi}</td><td class="num">${mo}</td><td class="num"><strong>${rp(bal.get(x.id))}</strong></td><td class="num">${sb2}</td><td class="num">${cp}</td><td>${rc}</td>${adm}</tr>`;
+      act=`<span class="tag g"><i></i>${t('tGame')}</span>${x.extraCourts?`<small>${t('extra',x.extraCourts)}</small>`:''}`;
+      pl=hasList(x)?`<button class="btn sm plbtn" type="button" data-players="${esc(x.id)}">${icon}${t('playersBtn',gPlayers(x))}</button>`:gPlayers(x);
+      mi=moneyIn(x);
+      const p=gPlayers(x)||1,c=courtOf(x)/p,b=x.shuttles*ballCost/p;cp=`<strong>${rp(c+b)}</strong><small>${rp(c)} + ${rp(b)}</small>`;
+      if(x.extraCost)mo=`<span class="out">${rp(x.extraCost)}</span>`;bb=`−${x.shuttles}`;
+    }else if(x.type==='court'){act=`<span class="tag c"><i></i>${t('tCourt')}</span>`;mo=`<span class="out">${rp(x.amount)}</span>`}
+    else{act=`<span class="tag s"><i></i>${t('tShuttle')}</span><small>${t('tubes',x.tubes)}</small>`;mo=`<span class="out">${rp(x.amount)}</span>`;bb=`+${x.tubes*12}`}
+    if(x.notes)act+=`<small>${esc(trNote(x.notes))}</small>`;
+    const rc=x.receipt?`<button class="btn sm" type="button" data-view="${esc(x.receipt)}">${t('view')}</button>`:'<span style="color:#b5c1ba">–</span>';
+    const adm=isAdmin?`<td style="white-space:nowrap"><button class="btn sm" type="button" data-edit="${esc(x.id)}">${t('edit')}</button> <button class="btn sm danger" type="button" data-del="${esc(x.id)}">${t('del')}</button></td>`:'';
+    const an=animRows&&i>=animFrom?` class="anim" style="--i:${i-animFrom}"`:'';
+    return `<tr${an}><td style="white-space:nowrap">${prettyDate(x.date)}</td><td>${act}</td><td class="num">${pl}</td><td class="num">${mi}</td><td class="num">${mo}</td><td class="num"><strong>${rp(bal.get(x.id))}</strong></td><td class="num">${bb}</td><td class="num">${cp}</td><td>${rc}</td>${adm}</tr>`;
   }).join('');
+  if(vis.length)animRows=false;
+  $('foot').innerHTML=items.length?`<tr><td colspan="2">${t('total')}${cutoff?' '+t('shown'):''}</td><td class="num">${tp}</td><td class="num">${ti===tt?rp(ti)+`<span class="paidtag">${t('paidTag')}</span>`:rp(ti)+' / '+rp(tt)}</td><td class="num">${rp(to)}</td><td></td><td></td><td class="num">${tp?rp(tc/tp)+`<small>${t('avg')}</small>`:''}</td><td></td>${isAdmin?'<td></td>':''}</tr>`:'';
   if($('plDlg').open)renderPlayers();
-  $('foot').innerHTML=items.length?`<tr><td colspan="2">Total${cutoff?' (shown)':''}</td><td class="num">${tp}</td><td class="num">${ti===tt?rp(ti)+' (paid)':rp(ti)+' / '+rp(tt)}</td><td class="num">${rp(to)}</td><td></td><td></td><td class="num">${tp?rp(tc/tp)+'<small>average</small>':''}</td><td></td>${isAdmin?'<td></td>':''}</tr>`:'';
 }
 
 /* ---------- read a pasted WhatsApp sign-up message ---------- */
 const MONTHS={jan:1,feb:2,mar:3,apr:4,mei:5,may:5,jun:6,jul:7,agu:8,aug:8,sep:9,okt:10,oct:10,nov:11,des:12,dec:12};
 function parseSignup(text){
-  const lines=String(text||'').replace(/\u00a0/g,' ').split(/\r?\n/);
+  const lines=String(text||'').replace(/ /g,' ').split(/\r?\n/);
   const players=[];let stop=false,date=null,courts=null,head=[];
   for(const l of lines){
     if(/waiting\s*list/i.test(l))stop=true;
@@ -300,7 +636,7 @@ function parseSignup(text){
     if(!m){if(!players.length)head.push(l);continue}
     if(stop)continue;
     let n=m[2];const paid=/[✅✔☑]/.test(n);
-    n=n.replace(/[✅✔☑\ufe0f]/g,'').trim();
+    n=n.replace(/[✅✔☑️]/g,'').trim();
     if(n)players.push({name:n,paid});
   }
   for(const l of head){
@@ -318,7 +654,6 @@ function parseSignup(text){
   }
   return {players,date,courts};
 }
-/* a box with a pasted message OR one name per line */
 function readNames(text){
   const p=parseSignup(text);
   if(p.players.length)return p;
@@ -326,7 +661,8 @@ function readNames(text){
   return {players:plain,date:null,courts:null};
 }
 
-/* ---------- outstanding + players ---------- */
+/* ---------- outstanding ---------- */
+let outFirst=true;
 function outstandingList(){
   const m=new Map();
   for(const x of items)for(const a of x.attendees)if(!a.paid){
@@ -338,127 +674,137 @@ function outstandingList(){
   for(const p of arr)p.list.sort((a,b)=>a.date<b.date?-1:1);
   return arr.sort((a,b)=>a.list[0].date<b.list[0].date?-1:a.list[0].date>b.list[0].date?1:a.name.localeCompare(b.name));
 }
-const shortDate=v=>{const[y,m,d]=v.split('-').map(Number);return new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'short'}).format(new Date(y,m-1,d))};
 function renderOutstanding(){
   const arr=outstandingList(),total=arr.reduce((n,p)=>n+p.list.length,0)*settings.fee;
-  $('outTotal').textContent=arr.length?`${arr.length} ${arr.length>1?'people':'person'} · ${rp(total)}`:'';
-  $('outNone').hidden=arr.length>0;
-  $('outRows').innerHTML=arr.map(p=>{
-    const chips=p.list.map(l=>`<span class="chip${isAdmin?'':' ro'}">${shortDate(l.date)} · ${rp(settings.fee)}${isAdmin?` <button type="button" data-pay="${esc(l.gid)}:${esc(l.aid)}">Paid ✓</button>`:''}</span>`).join('');
-    const adm=isAdmin?`<td style="white-space:nowrap">${p.list.length>1?`<button class="btn sm" type="button" data-payperson="${p.list.map(l=>esc(l.gid)+':'+esc(l.aid)).join(',')}">All paid</button>`:''}</td>`:'';
-    return `<tr><td><strong>${esc(p.name)}</strong></td><td>${chips}</td><td class="num"><span class="unp">${rp(p.list.length*settings.fee)}</span></td>${adm}</tr>`;
+  $('outTotal').textContent=arr.length?t('outTotal',arr.length,rp(total)):'';
+  $('outNone').hidden=arr.length>0||!loaded;
+  $('outGrid').innerHTML=arr.map((p,i)=>{
+    const chips=p.list.map(l=>`<span class="chip">${shortDate(l.date)}${isAdmin?` <button type="button" data-pay="${esc(l.gid)}:${esc(l.aid)}">${t('paidBtn')}</button>`:''}</span>`).join('');
+    const all=isAdmin&&p.list.length>1?`<button class="btn sm" type="button" data-payperson="${p.list.map(l=>esc(l.gid)+':'+esc(l.aid)).join(',')}">${t('allPaidBtn')}</button>`:'';
+    return `<div class="owe${outFirst?' anim':''}" style="--i:${i}"><div class="av">${esc(initials(p.name))}</div><div class="who"><b>${esc(p.name)}</b><div class="chips">${chips}</div></div><div class="amt num">${rp(p.list.length*settings.fee)}${all}</div></div>`;
   }).join('');
+  if(loaded)outFirst=false;
 }
+
+/* ---------- players dialog ---------- */
 async function syncGame(g){
   const x=items.find(i=>i.id===g);if(!x||!x.attendees.length)return;
   const r=await sb.from('entries').update({players:x.attendees.length,collected:paidN(x)*settings.fee}).eq('id',g);
   if(r.error)throw r.error;
 }
+let flashIds=new Set();
 async function setPaid(pairs,paid){
   const gids=[...new Set(pairs.map(p=>p[0]))];
-  for(const [g,a] of pairs){const x=items.find(i=>i.id===g),at=x&&x.attendees.find(z=>z.id===a);if(at){at.paid=paid;at.paid_on=paid?today():null}}
+  for(const [g,a] of pairs){const x=items.find(i=>i.id===g),at=x&&x.attendees.find(z=>z.id===a);if(at){at.paid=paid;at.paid_on=paid?today():null;flashIds.add(a)}}
   render();
-  if(preview){toast('Preview only: not saved.');return}
+  if(preview){toast(t('previewNotSaved'));return}
   try{
     const r=await sb.from('attendees').update({paid,paid_on:paid?today():null}).in('id',pairs.map(p=>p[1]));
     if(r.error)throw r.error;
     for(const g of gids)await syncGame(g);
-    toast(paid?(pairs.length>1?`${pairs.length} marked as paid.`:'Marked as paid.'):'Marked as unpaid.');
-  }catch(err){toast('Could not save: '+(err.message||'unknown error'))}
+    toast(paid?t('markedPaid',pairs.length):t('markedUnpaid'));
+  }catch(err){toast(t('saveErr')+(err.message||t('unknownErr')))}
   await loadAll();
 }
 let plId=null;
 function renderPlayers(){
   const x=items.find(i=>i.id===plId);if(!x){$('plDlg').close();return}
   const n=x.attendees.length,paid=paidN(x);
-  $('plTitle').textContent='Players · '+prettyDate(x.date);
-  $('plSummary').innerHTML=`<strong>${paid} of ${n}</strong> paid · ${rp(paid*settings.fee)} collected`+(n>paid?` · <span class="unp">${rp((n-paid)*settings.fee)} outstanding</span>`:'');
+  $('plTitle').textContent=t('plTitle',prettyDate(x.date));
+  $('plSummary').innerHTML=t('plSum',paid,n,rp(paid*settings.fee),n>paid?rp((n-paid)*settings.fee):'');
+  $('plBar').style.width=(n?paid/n*100:0)+'%';
   $('plAll').hidden=paid===n;
-  $('plList').innerHTML=x.attendees.map((a,i)=>`<div class="pl"><span>${i+1}. ${esc(a.name)}${a.cash?' <small>(cash)</small>':''}</span>`+(isAdmin
-    ?`<span style="white-space:nowrap"><button class="btn sm ${a.paid?'':'primary'}" type="button" data-toggle="${esc(x.id)}:${esc(a.id)}">${a.paid?'Paid ✓':'Mark paid'}</button> <button class="btn sm danger" type="button" data-rmp="${esc(x.id)}:${esc(a.id)}" title="Remove from this game">✕</button></span>`
-    :`<span class="${a.paid?'in':'unp'}">${a.paid?'Paid':'Unpaid'}</span>`)+`</div>`).join('');
+  const sc=$('plList').scrollTop;
+  $('plList').innerHTML=x.attendees.map((a,i)=>{
+    const st=isAdmin
+      ?`<button class="st ${a.paid?'ok':'no'}" type="button" data-toggle="${esc(x.id)}:${esc(a.id)}">${a.paid?t('paidBtn'):t('markPaid')}</button><button class="x" type="button" data-rmp="${esc(x.id)}:${esc(a.id)}" title="${esc(t('rmTitle'))}" aria-label="${esc(t('rmTitle'))}">✕</button>`
+      :`<span class="st ${a.paid?'ok':'no'}">${a.paid?t('paid'):t('unpaid')}</span>`;
+    return `<div class="pl${a.paid?' ok':''}${flashIds.has(a.id)?' flash':''}"><span class="n">${i+1}</span><span class="nm">${esc(a.name)}${a.cash?` <small>(${t('cashTag')})</small>`:''}</span>${st}</div>`;
+  }).join('');
+  $('plList').scrollTop=sc;flashIds.clear();
 }
 $('plClose').onclick=()=>$('plDlg').close();
-$('plPaste').oninput=()=>{const r=readNames($('plPaste').value);$('plPState').textContent=r.players.length?`Found ${r.players.length} players, ${r.players.filter(p=>p.paid).length} ticked as paid.`:''};
+$('plPaste').oninput=()=>{const r=readNames($('plPaste').value);$('plPState').textContent=r.players.length?t('found',r.players.length,r.players.filter(p=>p.paid).length):''};
 $('plPasteGo').onclick=async()=>{
   if(!isAdmin)return;const x=items.find(i=>i.id===plId);if(!x)return;
-  const r=readNames($('plPaste').value).players;if(!r.length){toast('No names found in the message.');return}
+  const r=readNames($('plPaste').value).players;if(!r.length){toast(t('noNames'));return}
   const free=[...x.attendees];const toPay=[],toAdd=[];
   for(const p of r){
     const k=p.name.trim().toLowerCase();const i=free.findIndex(a=>a.name.trim().toLowerCase()===k);
     if(i>=0){const a=free.splice(i,1)[0];if(p.paid&&!a.paid)toPay.push([x.id,a.id])}
     else toAdd.push(p);
   }
-  if(!toPay.length&&!toAdd.length){toast('Nothing new in that message.');return}
+  if(!toPay.length&&!toAdd.length){toast(t('nothingNew'));return}
   if(toAdd.length){
     if(preview){for(const p of toAdd)x.attendees.push({id:'n'+Math.random().toString(36).slice(2),name:p.name,paid:p.paid,cash:false,paid_on:null})}
     else{const ar=await sb.from('attendees').insert(toAdd.map(p=>({entry_id:x.id,name:p.name,paid:p.paid,paid_on:p.paid?today():null})));
-      if(ar.error){toast('Could not add: '+ar.error.message);return}
+      if(ar.error){toast(t('addErr')+ar.error.message);return}
       try{await loadAll();await syncGame(x.id)}catch(err){toast(err.message)}}
   }
-  if(toPay.length){const y=items.find(i=>i.id===x.id);await setPaid(toPay.map(p=>[p[0],p[1]]),true)}
+  if(toPay.length)await setPaid(toPay,true);
   else if(!preview)await loadAll();
   else render();
   $('plPaste').value='';$('plPState').textContent='';
-  toast(`${toAdd.length} added, ${toPay.length} marked paid.`);
+  toast(t('addedPaid',toAdd.length,toPay.length));
 };
 $('plAll').onclick=()=>{const x=items.find(i=>i.id===plId);if(!x||!isAdmin)return;
   const un=x.attendees.filter(a=>!a.paid);if(!un.length)return;
-  if(confirm(`Mark all ${un.length} unpaid players as paid for ${prettyDate(x.date)}?`))setPaid(un.map(a=>[x.id,a.id]),true)};
+  if(confirm(t('confirmAll',un.length,prettyDate(x.date))))setPaid(un.map(a=>[x.id,a.id]),true)};
 $('plAdd').addEventListener('submit',async e=>{
   e.preventDefault();if(!isAdmin)return;
   const name=$('plName').value.trim();if(!name)return;
   const x=items.find(i=>i.id===plId);if(!x)return;
-  if(preview){x.attendees.push({id:'n'+Date.now(),name,paid:false,cash:false,paid_on:null});$('plName').value='';render();toast('Preview only: not saved.');return}
+  if(preview){x.attendees.push({id:'n'+Date.now(),name,paid:false,cash:false,paid_on:null});$('plName').value='';render();toast(t('previewNotSaved'));return}
   const r=await sb.from('attendees').insert({entry_id:x.id,name,paid:false});
-  if(r.error){toast('Could not add: '+r.error.message);return}
+  if(r.error){toast(t('addErr')+r.error.message);return}
   $('plName').value='';await loadAll();try{await syncGame(x.id)}catch(err){toast(err.message)}await loadAll();
 });
 
 /* ---------- login ---------- */
-$('authBtn').onclick=async()=>{if(preview){isAdmin=!isAdmin;document.body.classList.toggle('admin',isAdmin);$('authBtn').textContent=isAdmin?'Log out':'Admin login';render();toast(isAdmin?'Admin preview on. Changes are not saved.':'Logged out.');return}
-  if(isAdmin){await sb.auth.signOut();await refreshAdmin();toast('Logged out.')}else $('loginDlg').showModal()};
+$('authBtn').onclick=async()=>{
+  if(preview){isAdmin=!isAdmin;document.body.classList.toggle('admin',isAdmin);$('authBtn').textContent=isAdmin?t('logout'):t('login');render();toast(isAdmin?t('previewAdmin'):t('loggedOut'));return}
+  if(isAdmin){await sb.auth.signOut();await refreshAdmin();toast(t('loggedOut'))}else $('loginDlg').showModal()};
 $('loginCancel').onclick=()=>$('loginDlg').close();
 $('loginForm').addEventListener('submit',async e=>{
   e.preventDefault();$('loginBtn').disabled=true;
   const {error}=await sb.auth.signInWithPassword({email:$('l_email').value.trim(),password:$('l_pass').value});
   $('loginBtn').disabled=false;
-  if(error){toast('Login failed: '+error.message);return}
-  $('l_pass').value='';$('loginDlg').close();await refreshAdmin();if(isAdmin)toast('Logged in as admin.');
+  if(error){toast(t('loginFail')+error.message);return}
+  $('l_pass').value='';$('loginDlg').close();await refreshAdmin();if(isAdmin)toast(t('loggedIn'));
 });
 
 /* ---------- photo / receipt ---------- */
 async function prepFile(file){
-  if(file.type==='application/pdf'){if(file.size>3e6)throw Error('PDF is too large (max 3 MB).');return {blob:file,ext:'pdf',type:'application/pdf'}}
-  if(!file.type.startsWith('image/'))throw Error('Please choose a photo or a PDF.');
+  if(file.type==='application/pdf'){if(file.size>3e6)throw Error(t('pdfBig'));return {blob:file,ext:'pdf',type:'application/pdf'}}
+  if(!file.type.startsWith('image/'))throw Error(t('notImg'));
   const bmp=await createImageBitmap(file);
   const k=Math.min(1,1400/Math.max(bmp.width,bmp.height));
   const c=document.createElement('canvas');c.width=Math.round(bmp.width*k);c.height=Math.round(bmp.height*k);
   c.getContext('2d').drawImage(bmp,0,0,c.width,c.height);
   const blob=await new Promise(r=>c.toBlob(r,'image/jpeg',.75));
-  if(!blob)throw Error('Could not read this image.');
+  if(!blob)throw Error(t('cantRead'));
   return {blob,ext:'jpg',type:'image/jpeg'};
 }
 
 /* ---------- forms ---------- */
 let editing=null,formType=null,pending;  // pending: undefined = keep, {blob,ext,type} = replace, null = remove
 const num=(id,label,extra='',hint='')=>`<div class="field"><label for="${id}">${label}</label><input id="${id}" type="number" inputmode="numeric" min="0" step="1" ${extra}>${hint?`<div class="hint">${hint}</div>`:''}</div>`;
-const dateF=`<div class="field"><label for="f_date">Date</label><input id="f_date" type="date" required></div>`;
-const notesF=`<div class="field"><label for="f_notes">Notes (optional)</label><textarea id="f_notes"></textarea></div>`;
+const dateF=()=>`<div class="field"><label for="f_date">${t('date')}</label><input id="f_date" type="date" required></div>`;
+const notesF=()=>`<div class="field"><label for="f_notes">${t('notes')}</label><textarea id="f_notes"></textarea></div>`;
 const fileF=label=>`<div class="field"><label for="f_file">${label}</label><input id="f_file" type="file" accept="image/*,application/pdf"><div class="hint" id="f_rstate"></div></div>`;
 const FORMS={
-  game:{title:'Game day',html:item=>dateF+(item&&hasList(item)
-      ?`<div class="hint" style="margin:-6px 0 14px">Players and payments are managed with the "players" button in the table.</div>`
-      :`<div class="field"><label for="f_names">Players: paste the WhatsApp sign-up message</label><textarea id="f_names" style="min-height:130px" placeholder="Paste the whole message here. Names with a ✅ are marked as paid. You can also type one name per line."></textarea><div class="hint" id="f_pstate">Optional.</div></div>
-        <div class="field"><label><input id="f_allpaid" type="checkbox" style="width:auto;margin-right:6px">Everyone has paid</label></div>
-        <div class="row2">${num('f_players','Players (if no names)','min="1"')}${num('f_collected','Money collected (Rp)','','Only if no names')}</div>`)
-    +`<div class="row2">${num('f_shuttles','Shuttlecocks used')}${num('f_extraCourts','Extra courts')}</div>${num('f_extraCost','Extra court cost paid (Rp)','','0 if none')}`+notesF+fileF('Photo (optional)')},
-  court:{title:'Court bill',html:()=>dateF+num('f_amount','Amount paid (Rp)')+notesF+fileF('Receipt (photo or PDF)')},
-  shuttle:{title:'Shuttlecock bill',html:()=>dateF+`<div class="row2">${num('f_tubes','Tubes bought','min="1"')}${num('f_amount','Amount paid (Rp)')}</div><div class="hint" style="margin:-6px 0 14px">1 tube = 12 shuttlecocks</div>`+notesF+fileF('Receipt (photo or PDF)')},
+  game:{title:'fGame',html:item=>dateF()+(item&&hasList(item)
+      ?`<div class="hint" style="margin:-6px 0 14px">${t('managed')}</div>`
+      :`<div class="field"><label for="f_names">${t('namesL')}</label><textarea id="f_names" style="min-height:130px" placeholder="${esc(t('namesPh'))}"></textarea><div class="hint" id="f_pstate">${t('optional')}</div></div>
+        <div class="field"><label><input id="f_allpaid" type="checkbox">${t('allPaidChk')}</label></div>
+        <div class="row2">${num('f_players',t('playersNo'),'min="1"')}${num('f_collected',t('collected'),'',t('onlyNoNames'))}</div>`)
+    +`<div class="row2">${num('f_shuttles',t('shuttles'))}${num('f_extraCourts',t('extraCourts'))}</div>${num('f_extraCost',t('extraCost'),'',t('zeroIfNone'))}`+notesF()+fileF(t('photo'))},
+  court:{title:'fCourt',html:()=>dateF()+num('f_amount',t('amount'))+notesF()+fileF(t('receipt'))},
+  shuttle:{title:'fShuttle',html:()=>dateF()+`<div class="row2">${num('f_tubes',t('tubesL'),'min="1"')}${num('f_amount',t('amount'))}</div><div class="hint" style="margin:-6px 0 14px">${t('tubeHint')}</div>`+notesF()+fileF(t('receipt'))},
 };
 function openForm(type,item){
   formType=type;editing=item||null;pending=undefined;
-  $('formTitle').textContent=(item?'Edit ':'Add ')+FORMS[type].title.toLowerCase();
+  $('formTitle').textContent=(item?t('fEdit'):t('fAdd'))+' '+t(FORMS[type].title);
   $('fields').innerHTML=FORMS[type].html(item);
   const set=(id,v)=>{const e=$(id);if(e)e.value=v};
   set('f_date',item?item.date:today());
@@ -468,21 +814,21 @@ function openForm(type,item){
   set('f_notes',item?item.notes:'');
   const rs=$('f_rstate');
   const showState=()=>{
-    if(pending&&pending.blob)rs.innerHTML='New file ready. <a href="#" id="rmR">Remove</a>';
-    else if(pending===undefined&&item&&item.receipt)rs.innerHTML='A file is already attached. Choose another to replace it, or <a href="#" id="rmR">remove it</a>.';
-    else rs.textContent='Optional. Take a photo or upload a PDF.';
+    if(pending&&pending.blob)rs.innerHTML=`${t('newFile')} <a href="#" id="rmR">${t('remove')}</a>`;
+    else if(pending===undefined&&item&&item.receipt)rs.innerHTML=`${t('fileAttached')}<a href="#" id="rmR">${t('removeIt')}</a>.`;
+    else rs.textContent=t('fileOpt');
     const a=$('rmR');if(a)a.onclick=e=>{e.preventDefault();pending=null;$('f_file').value='';showState()}};
   showState();
   $('f_file').onchange=async e=>{const f=e.target.files[0];if(!f)return;
-    try{pending=await prepFile(f)}catch(err){pending=undefined;e.target.value='';toast(err.message||'Could not read this file.')}showState()};
+    try{pending=await prepFile(f)}catch(err){pending=undefined;e.target.value='';toast(err.message||t('cantRead'))}showState()};
   const nm=$('f_names');
   if(nm)nm.oninput=()=>{
     const r=readNames(nm.value);
-    $('f_pstate').textContent=r.players.length?`Found ${r.players.length} players, ${r.players.filter(p=>p.paid).length} ticked as paid.`:'Optional.';
+    $('f_pstate').textContent=r.players.length?t('found',r.players.length,r.players.filter(p=>p.paid).length):t('optional');
     if(r.players.length>=3&&parseSignup(nm.value).players.length){
       if(r.date&&!editing)set('f_date',r.date);
-      if(r.courts&&!editing){set('f_extraCourts',Math.max(0,r.courts.length-3));if(!$('f_notes').value)set('f_notes','Courts '+r.courts.join(','));
-        $('f_pstate').textContent+=` Courts ${r.courts.join(',')}: ${Math.max(0,r.courts.length-3)} extra (3 are prepaid). Check this.`}
+      if(r.courts&&!editing){const ex=Math.max(0,r.courts.length-3);set('f_extraCourts',ex);if(!$('f_notes').value)set('f_notes','Courts '+r.courts.join(','));
+        $('f_pstate').textContent+=t('courtsFound',r.courts.join(','),ex)}
     }
   };
   $('formDlg').showModal();
@@ -493,26 +839,27 @@ $('form').addEventListener('submit',async e=>{
   const raw=id=>$(id)?$(id).value:'0';
   const v=id=>Number(raw(id));
   const date=$('f_date').value;
-  if(!/^\d{4}-\d{2}-\d{2}$/.test(date)){toast('Please choose a date.');return}
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(date)){toast(t('pickDate'));return}
   let row={type:formType,date,notes:$('f_notes').value.trim()||null};
   let ok,newNames=null,newAllPaid=false;
-  if(preview){toast('Preview only: connect Supabase to save new entries.');return}
+  if(preview){toast(t('previewNoEdit'));return}
   if(formType==='game'){
     const names=$('f_names')?readNames($('f_names').value).players:[];
     const managed=editing&&hasList(editing);
+    const base=['f_shuttles','f_extraCourts','f_extraCost'];
     if(managed){row={...row,shuttles_used:v('f_shuttles'),extra_courts:v('f_extraCourts'),extra_cost:v('f_extraCost')};
-      ok=['f_shuttles','f_extraCourts','f_extraCost'].every(i=>raw(i)!=='')&&isInt(row.shuttles_used)&&isInt(row.extra_courts)&&isInt(row.extra_cost)}
+      ok=base.every(i=>raw(i)!=='')&&isInt(row.shuttles_used)&&isInt(row.extra_courts)&&isInt(row.extra_cost)}
     else if(names.length){const allPaid=$('f_allpaid').checked;newNames=names;newAllPaid=allPaid;
       row={...row,players:names.length,collected:(allPaid?names.length:names.filter(p=>p.paid).length)*settings.fee,shuttles_used:v('f_shuttles'),extra_courts:v('f_extraCourts'),extra_cost:v('f_extraCost')};
-      ok=['f_shuttles','f_extraCourts','f_extraCost'].every(i=>raw(i)!=='')&&isInt(row.shuttles_used)&&isInt(row.extra_courts)&&isInt(row.extra_cost)}
+      ok=base.every(i=>raw(i)!=='')&&isInt(row.shuttles_used)&&isInt(row.extra_courts)&&isInt(row.extra_cost)}
     else{row={...row,players:v('f_players'),collected:v('f_collected'),shuttles_used:v('f_shuttles'),extra_courts:v('f_extraCourts'),extra_cost:v('f_extraCost')};
-      ok=['f_players','f_collected','f_shuttles','f_extraCourts','f_extraCost'].every(i=>raw(i)!=='')&&isInt(row.players,1)&&isInt(row.collected)&&isInt(row.shuttles_used)&&isInt(row.extra_courts)&&isInt(row.extra_cost)}
+      ok=['f_players','f_collected',...base].every(i=>raw(i)!=='')&&isInt(row.players,1)&&isInt(row.collected)&&isInt(row.shuttles_used)&&isInt(row.extra_courts)&&isInt(row.extra_cost)}
   }else if(formType==='court'){
     row={...row,amount:v('f_amount')};ok=raw('f_amount')!==''&&isInt(row.amount);
   }else{
     row={...row,tubes:v('f_tubes'),amount:v('f_amount')};ok=raw('f_amount')!==''&&isInt(row.tubes,1)&&isInt(row.amount);
   }
-  if(!ok){toast('Please fill in whole numbers (no negatives or decimals).');return}
+  if(!ok){toast(t('fillWhole'));return}
 
   $('saveBtn').disabled=true;
   let uploaded=null;const oldPath=editing?editing.receipt:null;
@@ -530,64 +877,66 @@ $('form').addEventListener('submit',async e=>{
     if(newId&&newNames){const ar=await sb.from('attendees').insert(newNames.map(n=>({entry_id:newId,name:n.name,paid:newAllPaid||n.paid,paid_on:(newAllPaid||n.paid)?date:null})));
       if(ar.error){await sb.from('entries').delete().eq('id',newId);throw ar.error}}
     if(oldPath&&(pending===null||(pending&&pending.blob)))await sb.storage.from('receipts').remove([oldPath]);
-    $('formDlg').close();toast(editing?'Updated.':'Saved.');await loadAll();
+    $('formDlg').close();toast(editing?t('updated'):t('saved'));animRows=true;animFrom=0;await loadAll();
   }catch(err){
     if(uploaded)await sb.storage.from('receipts').remove([uploaded]);
-    toast('Could not save: '+(err.message||'unknown error')+(isAdmin?'':' (are you logged in as admin?)'));
+    toast(t('saveErr')+(err.message||t('unknownErr'))+(isAdmin?'':t('notAdminHint')));
   }finally{$('saveBtn').disabled=false}
 });
 
-/* ---------- table actions ---------- */
+/* ---------- clicks ---------- */
 document.addEventListener('click',async e=>{
-  const t=e.target.closest('button');if(!t)return;
-  const d=t.dataset;
+  const b=e.target.closest('button');if(!b)return;
+  const d=b.dataset;
   if(d.players){plId=d.players;renderPlayers();$('plDlg').showModal();return}
   if(d.pay&&isAdmin){setPaid([d.pay.split(':')],true);return}
   if(d.payperson&&isAdmin){setPaid(d.payperson.split(',').map(p=>p.split(':')),true);return}
   if(d.toggle&&isAdmin){const[g,a]=d.toggle.split(':');const x=items.find(i=>i.id===g),at=x&&x.attendees.find(z=>z.id===a);if(at)setPaid([[g,a]],!at.paid);return}
   if(d.rmp&&isAdmin){const[g,a]=d.rmp.split(':');const x=items.find(i=>i.id===g),at=x&&x.attendees.find(z=>z.id===a);
-    if(!at||!confirm(`Remove ${at.name} from the ${prettyDate(x.date)} game?`))return;
-    if(preview){x.attendees=x.attendees.filter(z=>z.id!==a);render();toast('Preview only: not saved.');return}
-    const r=await sb.from('attendees').delete().eq('id',a);if(r.error){toast('Could not remove: '+r.error.message);return}
+    if(!at||!confirm(t('confirmRm',at.name,prettyDate(x.date))))return;
+    if(preview){x.attendees=x.attendees.filter(z=>z.id!==a);render();toast(t('previewNotSaved'));return}
+    const r=await sb.from('attendees').delete().eq('id',a);if(r.error){toast(t('rmErr')+r.error.message);return}
     await loadAll();try{await syncGame(g)}catch(err){toast(err.message)}await loadAll();return}
-  if((t.dataset.add||t.dataset.edit||t.dataset.del)&&preview){toast('Preview only: connect Supabase to add, edit or delete entries.');return}
+  if((d.add||d.edit||d.del)&&preview){toast(t('previewNoEdit'));return}
   if(!configured)return;
-  if(t.dataset.add&&isAdmin)return openForm(t.dataset.add);
-  if(t.dataset.edit&&isAdmin){const x=items.find(i=>i.id===t.dataset.edit);if(x)openForm(x.type,x);return}
-  if(t.dataset.del&&isAdmin){
-    const x=items.find(i=>i.id===t.dataset.del);
-    if(!x||!confirm(`Delete this entry from ${prettyDate(x.date)}? This cannot be undone.`))return;
+  if(d.add&&isAdmin)return openForm(d.add);
+  if(d.edit&&isAdmin){const x=items.find(i=>i.id===d.edit);if(x)openForm(x.type,x);return}
+  if(d.del&&isAdmin){
+    const x=items.find(i=>i.id===d.del);
+    if(!x||!confirm(t('confirmDel',prettyDate(x.date))))return;
     const r=await sb.from('entries').delete().eq('id',x.id);
-    if(r.error){toast('Could not delete: '+r.error.message);return}
+    if(r.error){toast(t('delErr')+r.error.message);return}
     if(x.receipt)await sb.storage.from('receipts').remove([x.receipt]);
-    toast('Deleted.');await loadAll();return}
-  if(t.dataset.view){
-    const p=t.dataset.view,url=photoUrl(p);
-    $('viewBody').innerHTML=p.toLowerCase().endsWith('.pdf')?`<a class="btn primary" href="${esc(url)}" target="_blank" rel="noopener">Open PDF</a>`:`<img src="${esc(url)}" alt="Photo or receipt">`;
+    toast(t('deleted'));await loadAll();return}
+  if(d.view){
+    const p=d.view,url=photoUrl(p);
+    $('viewBody').innerHTML=p.toLowerCase().endsWith('.pdf')?`<a class="btn primary" href="${esc(url)}" target="_blank" rel="noopener">${t('openPdf')}</a>`:`<img src="${esc(url)}" alt="">`;
     $('viewDlg').showModal();
   }
 });
-$('toggleAll').onclick=()=>{weeks+=4;render()};
-$('resetWeeks').onclick=()=>{weeks=5;render()};
+$('moreBtn').onclick=()=>{animFrom=$('rows').children.length;animRows=true;weeks+=4;render()};
+$('resetWeeks').onclick=()=>{weeks=5;render();document.querySelector('.panel').scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'})};
 $('closeView').onclick=()=>$('viewDlg').close();
+document.querySelectorAll('dialog').forEach(dl=>dl.addEventListener('click',e=>{if(e.target!==dl)return;const r=dl.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dl.close()}));
 
 /* ---------- settings (admin) ---------- */
-$('openSettings').onclick=()=>{if(preview){toast('Preview only: connect Supabase to change settings.');return}$('s_cash').value=settings.openingCash;$('s_balls').value=settings.openingShuttles;$('s_fee').value=settings.fee;$('setDlg').showModal()};
+$('openSettings').onclick=()=>{if(preview){toast(t('previewNoEdit'));return}$('s_cash').value=settings.openingCash;$('s_balls').value=settings.openingShuttles;$('s_fee').value=settings.fee;$('setDlg').showModal()};
 $('closeSet').onclick=()=>$('setDlg').close();
 $('setForm').addEventListener('submit',async e=>{
   e.preventDefault();
   const c=Number($('s_cash').value),b=Number($('s_balls').value),f=Number($('s_fee').value);
-  if($('s_cash').value===''||$('s_balls').value===''||$('s_fee').value===''||!isInt(c)||!isInt(b)||!isInt(f)){toast('Please enter whole numbers, 0 or more.');return}
+  if($('s_cash').value===''||$('s_balls').value===''||$('s_fee').value===''||!isInt(c)||!isInt(b)||!isInt(f)){toast(t('wholeNums'));return}
   const r=await sb.from('settings').update({opening_cash:c,opening_shuttles:b,fee:f}).eq('id',1);
-  if(r.error){toast('Could not save: '+r.error.message);return}
-  toast('Settings saved.');$('setDlg').close();await loadAll();
+  if(r.error){toast(t('saveErr')+r.error.message);return}
+  toast(t('settingsSaved'));$('setDlg').close();await loadAll();
 });
 
 /* ---------- start ---------- */
-if(preview){loadSeed();render()}
+applyLang();
+if(preview){$('setupMsg').hidden=false;loadSeed();render()}
 else{
-  sb.auth.onAuthStateChange((ev)=>{if(ev==='SIGNED_OUT'){isAdmin=false;document.body.classList.remove('admin');$('authBtn').textContent='Admin login';render()}});
-  (async()=>{await loadAll();await refreshAdmin()})();
+  sb.auth.onAuthStateChange(ev=>{if(ev==='SIGNED_OUT'){isAdmin=false;document.body.classList.remove('admin');$('authBtn').textContent=t('login');render()}});
+  (async()=>{await refreshAdmin();await loadAll()})();
 }
 })();
 </script>

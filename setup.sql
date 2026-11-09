@@ -59,6 +59,11 @@ create table if not exists public.attendees (
   created_at timestamptz not null default now()
 );
 create index if not exists attendees_entry_idx on public.attendees (entry_id);
+-- keeps players in sign-up order (new players get a higher number)
+create sequence if not exists public.attendees_pos_seq start 100000;
+alter table public.attendees add column if not exists pos bigint;
+alter table public.attendees alter column pos set default nextval('public.attendees_pos_seq');
+grant usage on sequence public.attendees_pos_seq to authenticated;
 
 -- 4) Security: everyone can READ, only admins can WRITE
 alter table public.entries  enable row level security;
