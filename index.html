@@ -117,7 +117,7 @@ body.admin .actions.adminonly{display:flex}
     <div class="empty" id="empty">Loading…</div>
   </div>
   <div class="note" id="costNote"></div>
-  <div style="text-align:center;margin:12px 0 26px"><button class="btn" type="button" id="toggleAll" hidden></button></div>
+  <div style="text-align:center;margin:12px 0 26px"><button class="btn" type="button" id="toggleAll" hidden></button> <button class="btn" type="button" id="resetWeeks" hidden>Show last 5 weeks only</button></div>
   <div class="sec" id="outSec">
     <h2>Outstanding payments <small id="outTotal"></small></h2>
     <div class="tablewrap">
@@ -191,7 +191,7 @@ const preview=!configured;
 if(preview){$('setupMsg').hidden=false}
 const sb=configured?window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY):null;
 
-let showAll=false;
+let weeks=5;
 let items=[],settings={openingCash:0,openingShuttles:0,fee:30000},isAdmin=false;
 const paidN=x=>x.attendees.filter(a=>a.paid).length;
 const hasList=x=>x.attendees.length>0;
@@ -256,10 +256,11 @@ function render(){
   $('empty').hidden=items.length>0;$('empty').textContent='No activity yet.';
   renderOutstanding();
   const gd=[...new Set(items.filter(x=>x.type==='game').map(x=>x.date))].sort().reverse();
-  const cutoff=(showAll||gd.length<=5)?null:gd[4];
+  const cutoff=gd.length<=weeks?null:gd[weeks-1];
   const vis=cutoff?items.filter(x=>x.date>=cutoff):items;
-  const tb=$('toggleAll');tb.hidden=items.length===vis.length&&!showAll;
-  tb.textContent=showAll?'Show last 5 weeks only':`Extend all (${items.length-vis.length} more)`;
+  const more=Math.max(0,gd.length-weeks),tb=$('toggleAll');
+  tb.hidden=more===0;tb.textContent=`Extend ${Math.min(4,more)} more week${Math.min(4,more)>1?'s':''}`;
+  $('resetWeeks').hidden=weeks<=5;
   // running balance, oldest first (bills are counted before the game on the same day)
   const asc=[...items].sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:((a.type==='game')-(b.type==='game')));
   const bal=new Map();let run=settings.openingCash;
@@ -566,7 +567,8 @@ document.addEventListener('click',async e=>{
     $('viewDlg').showModal();
   }
 });
-$('toggleAll').onclick=()=>{showAll=!showAll;render()};
+$('toggleAll').onclick=()=>{weeks+=4;render()};
+$('resetWeeks').onclick=()=>{weeks=5;render()};
 $('closeView').onclick=()=>$('viewDlg').close();
 
 /* ---------- settings (admin) ---------- */
