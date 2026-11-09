@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0e2822">
+<title>Goodminton</title>
+<style>
+:root{--ink:#152d28;--muted:#6d7f79;--line:#e7ede9;--bg:#f5f7f3;--green:#1b6a50;--dark:#0e2822;--lime:#d6ff7e;--red:#b3392d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.5;cursor:not-allowed}
+header{background:var(--dark);color:#f2fcf4;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;letter-spacing:-.5px}
+.logo{width:34px;height:34px;border-radius:11px;background:var(--lime);color:var(--dark);display:grid;place-items:center;font-weight:900;transform:rotate(-7deg)}
+.hbtns{display:flex;gap:8px;align-items:center}
+.hbtn{background:transparent;border:1px solid #2f5646;color:#cfe6d6;border-radius:10px;padding:8px 12px;font-size:13px;font-weight:600}
+.badge{font-size:11px;font-weight:800;letter-spacing:1px;background:var(--lime);color:var(--dark);border-radius:20px;padding:4px 9px}
+main{max-width:960px;margin:0 auto;padding:20px 16px 60px}
+.hero{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
+.card{border-radius:18px;padding:20px;background:#fff;border:1px solid var(--line)}
+.card.money{background:var(--dark);color:#fff;border:0}
+.card .label{font-size:12px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted)}
+.card.money .label{color:#9fbcaf}
+.card .big{font-size:clamp(26px,6vw,40px);font-weight:800;letter-spacing:-1.3px;margin:8px 0 4px;line-height:1.05}
+.card .sub{font-size:12px;color:var(--muted)}
+.card.money .sub{color:#9fbcaf}
+.neg{color:var(--red)}.card.money .neg{color:#ff9b8f}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.btn{border:1px solid #d5e3d9;background:#fff;color:var(--ink);border-radius:12px;padding:11px 14px;font-weight:700;font-size:13px}
+.btn:hover{background:#f0f7f1}
+.btn.primary{background:var(--green);border-color:var(--green);color:#fff}
+.btn.primary:hover{background:#14553f}
+.btn.danger{color:var(--red);border-color:#f0d6d1}
+.btn.sm{padding:5px 9px;font-size:12px;border-radius:8px}
+.tablewrap{background:#fff;border:1px solid var(--line);border-radius:18px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:640px}
+th{background:#f0f5f1;text-align:left;font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);padding:11px 12px;white-space:nowrap}
+td{padding:12px;border-top:1px solid var(--line);vertical-align:top}
+td.num,th.num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+td small{display:block;color:var(--muted);margin-top:3px;font-size:11px;line-height:1.4}
+.in{color:#1b6a50;font-weight:700}.out{color:var(--red);font-weight:700}
+tfoot td{background:#f7faf8;font-weight:800}
+.empty{padding:40px 16px;text-align:center;color:var(--muted)}
+h2{font-size:16px;margin:0 0 12px}
+dialog{border:0;border-radius:18px;padding:22px;width:min(480px,94vw);max-height:92vh;box-shadow:0 20px 60px #0004}
+dialog::backdrop{background:#0e282288}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12px;font-weight:700;margin-bottom:6px}
+input,textarea{width:100%;border:1px solid #dfe7e2;border-radius:12px;padding:11px 12px;color:var(--ink);background:#fff}
+input:focus,textarea:focus{outline:0;border-color:#45a17b;box-shadow:0 0 0 3px #d7f2e5}
+textarea{min-height:64px;resize:vertical}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.hint{font-size:11px;color:var(--muted);margin-top:5px}
+.dlgactions{display:flex;gap:8px;margin-top:18px}
+.dlgactions .primary{flex:1}
+.toast{position:fixed;left:50%;bottom:20px;transform:translate(-50%,20px);background:#123d2e;color:#fff;padding:12px 18px;border-radius:12px;font-size:13px;opacity:0;pointer-events:none;transition:.2s;z-index:9;max-width:90vw}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.receipt img{max-width:100%;border-radius:10px;display:block;margin:0 auto}
+.note{font-size:11px;color:var(--muted);margin-top:16px;line-height:1.6}
+.setup{background:#fff4dc;border:1px solid #f0dca8;color:#7a5410;border-radius:14px;padding:16px;font-size:13px;line-height:1.6;margin-bottom:16px}
+.sec{margin:0 0 22px}
+.sec h2{display:flex;align-items:baseline;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.sec h2 small{font-size:12px;font-weight:600;color:var(--muted)}
+.chip{display:inline-flex;align-items:center;gap:6px;background:#fdf1ef;border:1px solid #f3d5d0;color:#7d2a21;border-radius:20px;padding:3px 4px 3px 10px;font-size:12px;font-weight:600;margin:2px 4px 2px 0;white-space:nowrap}
+.chip.ro{padding:3px 10px}
+.chip button{border:0;background:#fff;border-radius:14px;padding:2px 8px;font-size:11px;font-weight:700;color:var(--green)}
+.unp{color:var(--red);font-weight:700}
+.pl{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 0;border-top:1px solid var(--line);font-size:14px}
+.pl small{color:var(--muted)}
+#plList{max-height:48vh;overflow:auto;margin:10px 0}
+.addp{display:flex;gap:8px;margin-top:10px}
+.addp input{flex:1}
+.good{padding:18px;text-align:center;color:var(--green);font-weight:700}
+.adminonly{display:none}
+body.admin .adminonly{display:revert}
+body.admin .addp.adminonly{display:flex}
+body.admin .actions.adminonly{display:flex}
+@media(max-width:520px){.hero{grid-template-columns:1fr}.card{padding:16px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="logo">G.</div>Goodminton</div>
+  <div class="hbtns">
+    <span class="badge adminonly">ADMIN</span>
+    <button class="hbtn adminonly" id="openSettings" type="button">⚙ Settings</button>
+    <button class="hbtn" id="authBtn" type="button">Admin login</button>
+  </div>
+</header>
+<main>
+  <div class="setup" id="setupMsg" hidden><strong>Preview mode.</strong> You are looking at the July to November 2026 data built into this page. Nothing you change is saved. To save changes, paste your Supabase <em>Project URL</em> and <em>anon public key</em> into <code>SUPABASE_URL</code> and <code>SUPABASE_ANON_KEY</code> near the top of the script, and run <code>setup.sql</code> then <code>seed.sql</code>. Tap "Admin login" to try the admin buttons.</div>
+
+  <section class="hero">
+    <div class="card money"><div class="label">Money we have</div><div class="big" id="cash">–</div><div class="sub" id="cashSub">Collected − court &amp; shuttlecock spending</div></div>
+    <div class="card"><div class="label">Shuttlecocks we have</div><div class="big" id="balls">–</div><div class="sub" id="ballsSub"></div></div>
+  </section>
+
+  <div class="sec" id="outSec">
+    <h2>Outstanding payments <small id="outTotal"></small></h2>
+    <div class="tablewrap">
+      <table style="min-width:520px">
+        <thead><tr><th>Who</th><th>Game date(s)</th><th class="num">Owes</th><th class="adminonly"></th></tr></thead>
+        <tbody id="outRows"></tbody>
+      </table>
+      <div class="good" id="outNone" hidden>Nobody owes anything.</div>
+    </div>
+  </div>
+
+  <div class="actions adminonly">
+    <button class="btn primary" data-add="game" type="button">＋ Game day</button>
+    <button class="btn" data-add="court" type="button">＋ Court bill</button>
+    <button class="btn" data-add="shuttle" type="button">＋ Shuttlecock bill</button>
+  </div>
+
+  <h2>Activity</h2>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Date</th><th>Activity</th><th class="num">Players</th><th class="num">Money in</th><th class="num">Money out</th><th class="num">Shuttlecocks</th><th>Photo / receipt</th><th class="adminonly"></th></tr></thead>
+      <tbody id="rows"></tbody>
+      <tfoot id="foot"></tfoot>
+    </table>
+    <div class="empty" id="empty">Loading…</div>
+  </div>
+</main>
+
+<dialog id="loginDlg">
+  <h2>Admin login</h2>
+  <form id="loginForm">
+    <div class="field"><label for="l_email">Email</label><input id="l_email" type="email" autocomplete="username" required></div>
+    <div class="field"><label for="l_pass">Password</label><input id="l_pass" type="password" autocomplete="current-password" required></div>
+    <div class="dlgactions"><button class="btn primary" type="submit" id="loginBtn">Log in</button><button class="btn" type="button" id="loginCancel">Cancel</button></div>
+  </form>
+</dialog>
+
+<dialog id="formDlg"><form id="form" novalidate><h2 id="formTitle"></h2><div id="fields"></div><div class="dlgactions"><button class="btn primary" type="submit" id="saveBtn">Save</button><button class="btn" type="button" id="cancel">Cancel</button></div></form></dialog>
+
+<dialog id="plDlg">
+  <h2 id="plTitle">Players</h2>
+  <div id="plSummary" style="font-size:13px"></div>
+  <div class="actions adminonly" style="margin:12px 0 0"><button class="btn primary" type="button" id="plAll">Mark all paid</button></div>
+  <div id="plList"></div>
+  <details class="adminonly" id="plPasteBox" style="margin-top:12px"><summary style="cursor:pointer;font-weight:700;font-size:13px">Paste an updated sign-up message</summary>
+    <textarea id="plPaste" style="min-height:110px;margin-top:8px" placeholder="Paste the message. New names are added, and names with a ✅ are marked as paid."></textarea>
+    <div class="hint" id="plPState"></div>
+    <button class="btn primary" type="button" id="plPasteGo" style="margin-top:8px">Update from message</button></details>
+  <form class="addp adminonly" id="plAdd"><input id="plName" placeholder="Add a player (name)" maxlength="60"><button class="btn" type="submit">Add</button></form>
+  <div class="dlgactions"><button class="btn primary" type="button" id="plClose">Close</button></div>
+</dialog>
+
+<dialog id="viewDlg"><h2>Photo / receipt</h2><div class="receipt" id="viewBody"></div><div class="dlgactions"><button class="btn primary" type="button" id="closeView">Close</button></div></dialog>
+
+<dialog id="setDlg">
+  <h2>Settings</h2>
+  <form id="setForm" novalidate>
+    <div class="field"><label for="s_cash">Starting money (IDR)</label><input id="s_cash" type="number" min="0" step="1"><div class="hint">Money the club had before using this app.</div></div>
+    <div class="field"><label for="s_balls">Starting shuttlecocks</label><input id="s_balls" type="number" min="0" step="1"><div class="hint">Shuttlecocks in stock before using this app (1 tube = 12).</div></div>
+    <div class="field"><label for="s_fee">Price per player (IDR)</label><input id="s_fee" type="number" min="0" step="1"><div class="hint">Used to work out money collected from the players marked as paid.</div></div>
+    <div class="dlgactions"><button class="btn primary" type="submit">Save settings</button><button class="btn" type="button" id="closeSet">Close</button></div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(()=>{'use strict';
+/* ====== PASTE YOUR SUPABASE DETAILS HERE (Supabase → Project Settings → API) ====== */
+const SUPABASE_URL='https://fkpiaegtgwxijzdvwgzj.supabase.co';        // e.g. https://abcdxyz.supabase.co
+const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZrcGlhZWd0Z3d4aWp6ZHZ3Z3pqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQyMDgxNTEsImV4cCI6MjEwOTc4NDE1MX0.RZPUySGWV-v5yuAA7wlkhdTKPeeSbzlQiPqnJufwFM4'; // the "anon public" key (safe to put in a web page)
+/* ================================================================================== */
+
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??'').replace(/[&<>"']/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
+const rp=n=>(n<0?'−':'')+'Rp'+Math.abs(Math.round(n)).toLocaleString('id-ID');
+const pad=n=>String(n).padStart(2,'0');
+const today=()=>{const d=new Date();return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`};
+const prettyDate=v=>{const[y,m,d]=v.split('-').map(Number);return new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'short',year:'numeric'}).format(new Date(y,m-1,d))};
+const isInt=(n,min=0)=>Number.isSafeInteger(n)&&n>=min;
+let toastT;const toast=m=>{const e=$('toast');e.textContent=m;e.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>e.classList.remove('show'),4000)};
+
+const configured=/^https:\/\/.+\.supabase\.(co|in)/.test(SUPABASE_URL)&&SUPABASE_ANON_KEY.length>40&&window.supabase;
+const preview=!configured;
+if(preview){$('setupMsg').hidden=false}
+const sb=configured?window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY):null;
+
+let items=[],settings={openingCash:0,openingShuttles:0,fee:30000},isAdmin=false;
+const paidN=x=>x.attendees.filter(a=>a.paid).length;
+const hasList=x=>x.attendees.length>0;
+const gPlayers=x=>hasList(x)?x.attendees.length:x.players;
+const gCollected=x=>hasList(x)?paidN(x)*settings.fee:x.collected;
+const SEED={"openingCash":1591000,"openingShuttles":27,"fee":30000,"entries":[{"type":"game","date":"2026-07-12","players":26,"collected":780000,"shuttles":0,"extraCourts":2,"extraCost":220000,"notes":"Courts 2,3,4,5","attendees":[["Raymond",1,0],["Thao",1,0],["Darwin",1,0],["Elvi",1,0],["Jacky",1,0],["Irvan",1,0],["Kelvin",1,0],["Caterine",1,0],["Marcel",1,0],["Sylvia",1,0],["Jonathan",1,0],["edy",1,0],["anggar",1,0],["alamsyah",1,0],["Dmitri",1,0],["Wellson",1,0],["Reynaldo",1,0],["jambin",1,0],["wellson 2",1,0],["win 2",1,0],["win 3",1,0],["wallace",1,0],["Jaysen",1,0],["Frido",1,0],["Ric",1,0],["St",1,0]]},{"type":"game","date":"2026-07-19","players":28,"collected":840000,"shuttles":19,"extraCourts":2,"extraCost":220000,"notes":"Courts 2,3,4,5","attendees":[["Raymond",1,0],["Thao",1,0],["Darwin",1,0],["Elvi",1,0],["Jacky",1,0],["Niclos",1,0],["Jonathan Wijaya",1,0],["Eric",1,0],["cete",1,0],["Irvan",1,0],["Step",1,0],["Kelvin",1,0],["alamsyah",1,0],["Kennedy",1,0],["denny",1,0],["jaysen",1,0],["wilsen",1,0],["jambin",1,0],["bob",1,0],["bob 2",1,0],["Valerian ( Irvan )",1,0],["Charles (Jonathan)",1,0],["Wilsen (Jonathan)",1,0],["Hen",1,0],["Patria (jacky)",1,0],["Wallace",1,0],["Wellson",1,0],["son",1,0]]},{"type":"game","date":"2026-07-26","players":26,"collected":780000,"shuttles":17,"extraCourts":2,"extraCost":220000,"notes":"Courts 2,3,4,5","attendees":[["Darwin",1,0],["Jacky",1,0],["Raymond",1,0],["Samajivata",1,0],["Marcelina",1,0],["Brian",1,0],["Caterine",1,0],["Jonathan W",1,0],["Irvan",1,0],["Kelvin (Irvan)",1,0],["Ahau (Irvan)",1,0],["Patria(Jacky)",1,0],["Jerry",1,0],["Wellson",1,0],["Jambin",1,0],["Rey",1,0],["Niclos",1,0],["Elvi",1,0],["Thao",1,0],["hendru",1,1],["Jaysen",1,0],["Asep",1,0],["Wilson",1,0],["wendra",1,0],["Asep 2",1,0],["yoga (jacky)",1,0]]},{"type":"game","date":"2026-08-02","players":34,"collected":1020000,"shuttles":18,"extraCourts":2,"extraCost":220000,"notes":"Courts 1,2,3,4,5","attendees":[["Raymond",1,0],["Thao",1,0],["Darwin",1,0],["Elvi",1,0],["Jacky",1,0],["Jonathan",1,0],["Steph",1,0],["Irvan",1,0],["Niclos",1,0],["Mimi",1,0],["Steven",1,0],["Samajivata",1,0],["Pin",1,0],["Yoga (Jacky)",1,0],["Patria (Jacky)",1,0],["Jes",1,0],["Jes1",1,0],["Rey",1,0],["Wellson",1,0],["jerry",1,0],["wellson 2",1,0],["Martyn",1,0],["Indro",1,0],["wallace",1,0],["edy",1,0],["anggar",1,0],["bernad",1,0],["felix",1,0],["Jaysen",1,1],["Kennedy",1,0],["Asep",1,0],["ct",1,0],["asen",1,0],["wilson",1,0]]},{"type":"game","date":"2026-08-09","players":17,"collected":510000,"shuttles":12,"extraCourts":0,"extraCost":0,"notes":"Courts 3,4,5 (assumed)","attendees":[["Raymond",1,0],["Thao",1,0],["Rey",1,0],["Elvi",1,0],["Jacky",1,0],["Samajivata",1,0],["Jonathan W",1,0],["Jerry",1,0],["Vivien",1,0],["Marcel",1,0],["Caterine",1,0],["Wellson",1,0],["Wellson 2",1,0],["Jambin",1,0],["Patria",1,0],["Irvan",1,0],["Wilson",1,0]]},{"type":"game","date":"2026-08-16","players":29,"collected":870000,"shuttles":17,"extraCourts":2,"extraCost":220000,"notes":"Courts 2,3,4,5,6","attendees":[["Elvi",1,0],["Jacky",1,0],["Darwin",1,0],["jess",1,0],["jess 2",1,0],["jess 3",1,0],["jess 4",1,0],["jess 5",1,0],["jess 6",1,0],["Raymond",1,0],["Thao",1,0],["Ken",1,0],["Caterine",1,0],["Marcellina",1,0],["Darwin 2",1,0],["Patria",1,0],["Winda",1,0],["Irvan",1,0],["Jaysen",1,0],["Vivien",1,0],["Yoga",1,0],["Ahsan Malaysia",1,0],["WY",1,0],["Wellson",1,0],["son",1,0],["Asep",1,0],["teman Asep",1,0],["Ryan",1,0],["Jozua",1,0]]},{"type":"game","date":"2026-08-23","players":20,"collected":600000,"shuttles":13,"extraCourts":0,"extraCost":0,"notes":"Courts 2,3,4","attendees":[["Darwin",1,0],["Wilianto",1,0],["jambin",1,0],["Irvan",1,0],["Ryan",1,0],["caterine",1,0],["marcel",1,0],["owen",1,0],["Jerry",1,0],["Jonathan W",1,0],["jess",1,0],["jess 2",1,0],["jess 3",1,0],["jess 4",1,0],["jess 5",1,0],["wilson",1,0],["Samajivata",1,0],["Wellson",1,0],["Justin",1,0],["Jozua",1,0]]},{"type":"game","date":"2026-08-30","players":26,"collected":780000,"shuttles":16,"extraCourts":1,"extraCost":110000,"notes":"Courts 2,3,4,5","attendees":[["Raymond",1,0],["Darwin",1,0],["Jonathan W",1,0],["Irvan",1,0],["Kelvin",1,0],["mikael",1,0],["jess",1,0],["jess 2",1,0],["jess 3",1,0],["jess 4",1,0],["jess 5",1,0],["jess 6",1,0],["Kennedy",1,0],["marcel",1,0],["caterine",1,0],["brian",1,0],["Patria",1,1],["Alam",1,0],["Martyn",1,0],["Indro",1,0],["St",1,0],["jambin",1,0],["Jerry",1,0],["Johan",1,0],["Jaysen",1,1],["wendra",1,0]]},{"type":"game","date":"2026-09-06","players":27,"collected":810000,"shuttles":19,"extraCourts":1,"extraCost":110000,"notes":"Courts 3,4,5,6","attendees":[["Darwin",1,0],["Elvi",1,0],["Irvan",1,0],["Samajivata",1,0],["Jonathan W",1,0],["KC",1,0],["jess",1,0],["jess 2",1,0],["Jerry",1,0],["marcel",1,0],["sylvia",1,0],["brian",1,0],["robert",1,0],["jess 3",1,0],["darwin 2",1,0],["darwin 3",1,0],["dendi",1,0],["Wellson",1,0],["wil",1,0],["Mike",1,0],["St",1,0],["Ric",1,0],["wendra",1,0],["sepsep",1,0],["siong",1,0],["siong 2",1,0],["marcel2",1,0]]},{"type":"game","date":"2026-09-13","players":20,"collected":600000,"shuttles":13,"extraCourts":0,"extraCost":0,"notes":"Courts 3,4,5","attendees":[["Wallace",1,0],["Elvi",1,0],["Jonathan",1,0],["Jacky",1,0],["Irvan",1,0],["Nicky",1,0],["jes",1,0],["Kennedy",1,0],["Okta",1,0],["KC",1,0],["Caterine",1,0],["Ryan",1,0],["alam",1,0],["Ahao",1,0],["elvi 2",1,0],["elvi 3",1,0],["Vincent (Jonathan)",1,0],["Kelvin (Jonathan)",1,0],["Ric",1,0],["St",1,0]]},{"type":"game","date":"2026-09-20","players":26,"collected":780000,"shuttles":16,"extraCourts":1,"extraCost":110000,"notes":"Courts 2,3,4,5","attendees":[["Darwin",1,0],["Jacky",1,0],["Okta",1,0],["Jonathan WIjaya",1,0],["Patria",1,0],["Caterine",1,0],["Marcellina Victoria",1,0],["Nicky",1,0],["Irvan",1,0],["syl",1,0],["syl2",1,0],["syl 3",1,0],["brian",1,0],["owen",1,0],["Ric",1,0],["St",1,0],["alam",1,0],["KC",1,0],["jes",1,0],["hendru",1,0],["wendra",1,0],["jambin",1,0],["syl 4",1,0],["Charles",1,0],["jaysen",1,0],["Hen",1,0]]},{"type":"game","date":"2026-09-27","players":18,"collected":540000,"shuttles":16,"extraCourts":0,"extraCost":0,"notes":"Courts 2,3,4","attendees":[["Darwin",1,0],["Jacky",1,0],["Elvi",1,0],["Samajivata",1,0],["Jonathan Wijaya",1,0],["jess",1,0],["jess 2",1,0],["jess 3",1,0],["jess 4",1,0],["jess 5",1,0],["jess 6",1,0],["alam",1,0],["irvan",1,0],["KC",1,0],["Hen",1,0],["jess 7",1,0],["Ric",1,0],["St",1,0]]},{"type":"game","date":"2026-10-04","players":23,"collected":690000,"shuttles":18,"extraCourts":0,"extraCost":0,"notes":"Courts 3,4,5","attendees":[["Darwin",1,0],["Jacky",1,0],["Elvi",1,0],["Jess 6",1,0],["Gorby (Eric)",1,0],["Jess",1,0],["Jess 2",1,0],["Kennedy",1,0],["Patria",1,0],["Jess 3",1,0],["KC",1,0],["Ric",1,0],["Jess 4",1,0],["Jess 5",1,0],["Hen",1,0],["ct",1,0],["karren",1,0],["Jaysen",1,0],["febri",1,0],["okta",1,0],["St",1,0],["hansen",1,0],["temen eric",1,0]]},{"type":"game","date":"2026-10-11","players":19,"collected":570000,"shuttles":13,"extraCourts":0,"extraCost":0,"notes":"Courts 3,4,5","attendees":[["Darwin",1,0],["Jacky",1,0],["Elvi",1,0],["Samajivata",1,0],["Jonathan W",1,0],["Patria",1,0],["jambin",1,0],["Hen",1,0],["Jerry",1,0],["wellson",1,0],["jess",1,0],["jess2",1,0],["KC",1,0],["acen",1,0],["Dennis Ganz",1,0],["wilson",1,0],["hendru",1,0],["wellson 2",1,0],["wendra",1,0]]},{"type":"game","date":"2026-10-18","players":25,"collected":750000,"shuttles":11,"extraCourts":1,"extraCost":110000,"notes":"Courts 3,4,5,6","attendees":[["Darwin",1,0],["Jacky",1,0],["Elvi",1,0],["Raymond",1,0],["Irvan",1,0],["wendra",1,0],["Samajivata",1,0],["Jessen",1,0],["Patria",1,0],["okta",1,0],["Kennedy",1,0],["Nicky",1,0],["hendru",1,0],["kc",1,0],["jess",1,0],["acen",1,0],["jess 2",1,0],["Indro",1,0],["Martyn",1,0],["jambin",1,0],["wallace",1,0],["wanto",1,0],["David",1,0],["Nando (Eric)",1,0],["Ric+",1,0]]},{"type":"game","date":"2026-10-25","players":20,"collected":600000,"shuttles":12,"extraCourts":0,"extraCost":0,"notes":"Courts 3,4,5","attendees":[["Darwin",1,0],["Jacky",1,0],["Thao",1,0],["Raymond",1,0],["Elvi",1,0],["Charles",1,0],["samajivata",1,0],["Irvan",1,0],["Tresia",1,0],["W Jonathan",1,0],["Hen",1,0],["Patria",1,0],["Jesen",1,0],["KC",1,0],["Jordy",1,0],["acen",1,0],["austin",1,0],["alam",1,0],["Wellson",1,0],["jambin",1,0]]},{"type":"game","date":"2026-11-01","players":20,"collected":600000,"shuttles":21,"extraCourts":0,"extraCost":0,"notes":"Courts 3,4,5","attendees":[["Irvan",1,0],["Jacky",1,0],["Thao",1,0],["Raymond",1,0],["Jessen",1,0],["Tresia",1,0],["Jonathan W",1,0],["Patria",1,0],["jambin",1,0],["Hen",1,0],["Kennedy",1,0],["Jason",1,0],["Mike",1,0],["kc",1,0],["wallace",1,0],["acen",1,0],["hendru",1,0],["Jaysen",1,0],["Cagar (hendru)",1,0],["Vale (Jonathan)",1,0]]},{"type":"game","date":"2026-11-08","players":31,"collected":420000,"shuttles":21,"extraCourts":2,"extraCost":220000,"notes":"Courts 2,3,4,5,6","attendees":[["Raymond",0,0],["Thao",0,0],["Darwin",1,0],["Elvi",0,0],["Jacky",1,0],["Winda",1,0],["Irvan",1,0],["Tresia",1,0],["jess",0,0],["jess2",0,0],["Hen",0,0],["win 2 ( Cindy)",1,0],["win3 (Ella)",1,0],["win4 (Jovin)",1,1],["Jonathan",1,0],["Jesen",0,0],["Mike",0,0],["Jason",0,0],["KC",0,0],["Wendra",1,0],["acen",0,0],["Patria",0,0],["josh",0,0],["oscar",0,0],["rijal",0,0],["Ric",1,0],["win5 (Klif)",1,1],["wallace",1,0],["maria",0,0],["maria 2",0,0],["Ricky",1,0]]},{"type":"shuttle","date":"2026-07-19","tubes":5,"amount":1000000,"notes":"Alpha, 5 slop"},{"type":"court","date":"2026-07-20","amount":25000,"notes":"Other payment, no description given"},{"type":"court","date":"2026-07-31","amount":1500000,"notes":"Monthly courts: August: 3 courts × 5 Sundays"},{"type":"shuttle","date":"2026-08-17","tubes":6,"amount":1230000,"notes":"6 slop (72 balls) × Rp205K"},{"type":"court","date":"2026-08-31","amount":1200000,"notes":"Monthly courts: September: 3 courts × 4 Sundays"},{"type":"shuttle","date":"2026-09-20","tubes":5,"amount":1025000,"notes":"Alpha yellow, 5 slop"},{"type":"court","date":"2026-09-29","amount":1200000,"notes":"Monthly courts: October: 3 courts × 4 Sundays"},{"type":"shuttle","date":"2026-10-09","tubes":5,"amount":1025000,"notes":"5 slop"},{"type":"court","date":"2026-10-29","amount":1500000,"notes":"Monthly courts: November: 3 courts × 5 Sundays"}]};
+function loadSeed(){
+  settings={openingCash:SEED.openingCash,openingShuttles:SEED.openingShuttles,fee:SEED.fee};
+  items=SEED.entries.map((e,i)=>({id:'e'+i,type:e.type,date:e.date,notes:e.notes||'',receipt:null,players:e.players||0,collected:e.collected||0,shuttles:e.shuttles||0,extraCourts:e.extraCourts||0,extraCost:e.extraCost||0,tubes:e.tubes||0,amount:e.amount||0,
+    attendees:(e.attendees||[]).map((a,j)=>({id:'e'+i+'a'+j,name:a[0],paid:!!a[1],cash:!!a[2],paid_on:null}))}));
+  items.sort((a,b)=>a.date<b.date?1:a.date>b.date?-1:0);
+}
+
+/* ---------- loading ---------- */
+const fromRow=r=>({id:r.id,type:r.type,date:r.date,notes:r.notes||'',receipt:r.receipt_path||null,
+  players:r.players??0,collected:r.collected??0,attendees:[],shuttles:r.shuttles_used??0,extraCourts:r.extra_courts??0,extraCost:r.extra_cost??0,tubes:r.tubes??0,amount:r.amount??0});
+async function loadAll(){
+  const [e,s,at]=await Promise.all([
+    sb.from('entries').select('*').order('date',{ascending:false}).order('created_at',{ascending:false}).limit(5000),
+    sb.from('settings').select('*').eq('id',1).maybeSingle(),
+    sb.from('attendees').select('*').order('created_at',{ascending:true}).limit(20000)]);
+  if(e.error||s.error||at.error){toast('Could not load data. Check the setup (setup.sql run? keys correct?).');$('empty').textContent='Could not load data.';return}
+  items=e.data.map(fromRow);
+  const byId=new Map(items.map(x=>[x.id,x]));
+  for(const a of at.data){const x=byId.get(a.entry_id);if(x)x.attendees.push({id:a.id,name:a.name,paid:a.paid,cash:a.cash,paid_on:a.paid_on})}
+  if(s.data)settings={openingCash:Number(s.data.opening_cash),openingShuttles:Number(s.data.opening_shuttles),fee:Number(s.data.fee??30000)};
+  render();
+}
+async function refreshAdmin(){
+  const {data:{session}}=await sb.auth.getSession();
+  isAdmin=false;
+  if(session){const {data,error}=await sb.rpc('is_admin');isAdmin=!error&&data===true;
+    if(!isAdmin){toast('This account is not an admin. Ask to be added.');await sb.auth.signOut()}}
+  document.body.classList.toggle('admin',isAdmin);
+  $('authBtn').textContent=isAdmin?'Log out':'Admin login';
+  render();
+}
+
+/* ---------- render ---------- */
+const photoUrl=p=>sb.storage.from('receipts').getPublicUrl(p).data.publicUrl;
+function render(){
+  let cash=settings.openingCash,balls=settings.openingShuttles,players=0,inn=0,out=0;
+  for(const x of items){
+    if(x.type==='game'){const pl=gPlayers(x),co=gCollected(x);cash+=co-x.extraCost;balls-=x.shuttles;players+=pl;inn+=co;out+=x.extraCost}
+    else if(x.type==='court'){cash-=x.amount;out+=x.amount}
+    else{cash-=x.amount;balls+=x.tubes*12;out+=x.amount}
+  }
+  $('cash').textContent=rp(cash);$('cash').classList.toggle('neg',cash<0);
+  $('balls').textContent=balls.toLocaleString('en-US');$('balls').classList.toggle('neg',balls<0);
+  const owed=items.reduce((n,x)=>n+(x.attendees.length-paidN(x)),0)*settings.fee;
+  $('cashSub').textContent='Collected − court & shuttlecock spending'+(owed?` · ${rp(owed)} still to collect`:'');
+  $('ballsSub').textContent=balls<0?'Below zero — check the records':`about ${Math.floor(balls/12)} tubes (12 per tube)`;
+  $('empty').hidden=items.length>0;$('empty').textContent='No activity yet.';
+  renderOutstanding();
+  $('rows').innerHTML=items.map(x=>{
+    let act,pl='',mi='',mo='',sb2='';
+    if(x.type==='game'){
+      act=`Game day${x.extraCourts?`<small>${x.extraCourts} extra court${x.extraCourts>1?'s':''}</small>`:''}`;
+      const unp=x.attendees.length-paidN(x);
+      pl=hasList(x)?`<button class="btn sm" type="button" data-players="${esc(x.id)}">${gPlayers(x)} players</button>${unp?`<small class="unp">${unp} unpaid</small>`:'<small>all paid</small>'}`:gPlayers(x);
+      mi=`<span class="in">${rp(gCollected(x))}</span>`;mo=x.extraCost?`<span class="out">${rp(x.extraCost)}</span>`:'–';sb2=`−${x.shuttles}`;
+    }else if(x.type==='court'){act='Court bill';mo=`<span class="out">${rp(x.amount)}</span>`}
+    else{act=`Shuttlecock bill<small>${x.tubes} tube${x.tubes>1?'s':''}</small>`;mo=`<span class="out">${rp(x.amount)}</span>`;sb2=`+${x.tubes*12}`}
+    if(x.notes)act+=`<small>${esc(x.notes)}</small>`;
+    const rc=x.receipt?`<button class="btn sm" type="button" data-view="${esc(x.receipt)}">View</button>`:'<span style="color:#aab8b1">–</span>';
+    const adm=isAdmin?`<td style="white-space:nowrap"><button class="btn sm" type="button" data-edit="${esc(x.id)}">Edit</button> <button class="btn sm danger" type="button" data-del="${esc(x.id)}">Delete</button></td>`:'';
+    return `<tr><td style="white-space:nowrap">${prettyDate(x.date)}</td><td>${act}</td><td class="num">${pl}</td><td class="num">${mi}</td><td class="num">${mo}</td><td class="num">${sb2}</td><td>${rc}</td>${adm}</tr>`;
+  }).join('');
+  if($('plDlg').open)renderPlayers();
+  $('foot').innerHTML=items.length?`<tr><td colspan="2">Total</td><td class="num">${players}</td><td class="num">${rp(inn)}</td><td class="num">${rp(out)}</td><td></td><td></td>${isAdmin?'<td></td>':''}</tr>`:'';
+}
+
+/* ---------- read a pasted WhatsApp sign-up message ---------- */
+const MONTHS={jan:1,feb:2,mar:3,apr:4,mei:5,may:5,jun:6,jul:7,agu:8,aug:8,sep:9,okt:10,oct:10,nov:11,des:12,dec:12};
+function parseSignup(text){
+  const lines=String(text||'').replace(/\u00a0/g,' ').split(/\r?\n/);
+  const players=[];let stop=false,date=null,courts=null,head=[];
+  for(const l of lines){
+    if(/waiting\s*list/i.test(l))stop=true;
+    const m=l.match(/^\s*(?:\[[^\]]*\]\s*[^:]*:\s*)?(\d{1,2})\s*[\).]\s*(.*)$/);
+    if(!m){if(!players.length)head.push(l);continue}
+    if(stop)continue;
+    let n=m[2];const paid=/[✅✔☑]/.test(n);
+    n=n.replace(/[✅✔☑\ufe0f]/g,'').trim();
+    if(n)players.push({name:n,paid});
+  }
+  for(const l of head){
+    if(!date){
+      let d=l.match(/(\d{1,2})\s+([A-Za-z]{3,})\w*(?:\s+(\d{4}))?/);
+      if(d&&MONTHS[d[2].slice(0,3).toLowerCase()]){const y=d[3]||new Date().getFullYear();date=`${y}-${pad(MONTHS[d[2].slice(0,3).toLowerCase()])}-${pad(d[1])}`}
+      else{d=l.match(/\((\d{1,2})\/(\d{1,2})\)/);if(d)date=`${new Date().getFullYear()}-${pad(d[2])}-${pad(d[1])}`}
+    }
+    const c=l.match(/HU\s*no\.?\s*(?:[\d,\s&\-]|dan)+/i);
+    if(c&&!courts){
+      const txt=c[0].replace(/HU\s*no\.?/i,'').replace(/dan|&/gi,',');
+      let nums=[];for(const part of txt.split(',')){const r=part.trim().match(/^(\d+)\s*-\s*(\d+)$/);if(r){for(let i=+r[1];i<=+r[2];i++)nums.push(i)}else if(/^\d+$/.test(part.trim()))nums.push(+part.trim())}
+      if(nums.length)courts=nums;
+    }
+  }
+  return {players,date,courts};
+}
+/* a box with a pasted message OR one name per line */
+function readNames(text){
+  const p=parseSignup(text);
+  if(p.players.length)return p;
+  const plain=String(text||'').split(/\r?\n/).map(x=>x.trim()).filter(Boolean).map(name=>({name,paid:false}));
+  return {players:plain,date:null,courts:null};
+}
+
+/* ---------- outstanding + players ---------- */
+function outstandingList(){
+  const m=new Map();
+  for(const x of items)for(const a of x.attendees)if(!a.paid){
+    const k=a.name.trim().toLowerCase();
+    if(!m.has(k))m.set(k,{name:a.name.trim(),list:[]});
+    m.get(k).list.push({gid:x.id,aid:a.id,date:x.date});
+  }
+  const arr=[...m.values()];
+  for(const p of arr)p.list.sort((a,b)=>a.date<b.date?-1:1);
+  return arr.sort((a,b)=>a.list[0].date<b.list[0].date?-1:a.list[0].date>b.list[0].date?1:a.name.localeCompare(b.name));
+}
+const shortDate=v=>{const[y,m,d]=v.split('-').map(Number);return new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'short'}).format(new Date(y,m-1,d))};
+function renderOutstanding(){
+  const arr=outstandingList(),total=arr.reduce((n,p)=>n+p.list.length,0)*settings.fee;
+  $('outTotal').textContent=arr.length?`${arr.length} ${arr.length>1?'people':'person'} · ${rp(total)}`:'';
+  $('outNone').hidden=arr.length>0;
+  $('outRows').innerHTML=arr.map(p=>{
+    const chips=p.list.map(l=>`<span class="chip${isAdmin?'':' ro'}">${shortDate(l.date)} · ${rp(settings.fee)}${isAdmin?` <button type="button" data-pay="${esc(l.gid)}:${esc(l.aid)}">Paid ✓</button>`:''}</span>`).join('');
+    const adm=isAdmin?`<td style="white-space:nowrap">${p.list.length>1?`<button class="btn sm" type="button" data-payperson="${p.list.map(l=>esc(l.gid)+':'+esc(l.aid)).join(',')}">All paid</button>`:''}</td>`:'';
+    return `<tr><td><strong>${esc(p.name)}</strong></td><td>${chips}</td><td class="num"><span class="unp">${rp(p.list.length*settings.fee)}</span></td>${adm}</tr>`;
+  }).join('');
+}
+async function syncGame(g){
+  const x=items.find(i=>i.id===g);if(!x||!x.attendees.length)return;
+  const r=await sb.from('entries').update({players:x.attendees.length,collected:paidN(x)*settings.fee}).eq('id',g);
+  if(r.error)throw r.error;
+}
+async function setPaid(pairs,paid){
+  const gids=[...new Set(pairs.map(p=>p[0]))];
+  for(const [g,a] of pairs){const x=items.find(i=>i.id===g),at=x&&x.attendees.find(z=>z.id===a);if(at){at.paid=paid;at.paid_on=paid?today():null}}
+  render();
+  if(preview){toast('Preview only: not saved.');return}
+  try{
+    const r=await sb.from('attendees').update({paid,paid_on:paid?today():null}).in('id',pairs.map(p=>p[1]));
+    if(r.error)throw r.error;
+    for(const g of gids)await syncGame(g);
+    toast(paid?(pairs.length>1?`${pairs.length} marked as paid.`:'Marked as paid.'):'Marked as unpaid.');
+  }catch(err){toast('Could not save: '+(err.message||'unknown error'))}
+  await loadAll();
+}
+let plId=null;
+function renderPlayers(){
+  const x=items.find(i=>i.id===plId);if(!x){$('plDlg').close();return}
+  const n=x.attendees.length,paid=paidN(x);
+  $('plTitle').textContent='Players · '+prettyDate(x.date);
+  $('plSummary').innerHTML=`<strong>${paid} of ${n}</strong> paid · ${rp(paid*settings.fee)} collected`+(n>paid?` · <span class="unp">${rp((n-paid)*settings.fee)} outstanding</span>`:'');
+  $('plAll').hidden=paid===n;
+  const sorted=[...x.attendees].sort((a,b)=>a.paid-b.paid);
+  $('plList').innerHTML=sorted.map(a=>`<div class="pl"><span>${esc(a.name)}${a.cash?' <small>(cash)</small>':''}</span>`+(isAdmin
+    ?`<span style="white-space:nowrap"><button class="btn sm ${a.paid?'':'primary'}" type="button" data-toggle="${esc(x.id)}:${esc(a.id)}">${a.paid?'Paid ✓':'Mark paid'}</button> <button class="btn sm danger" type="button" data-rmp="${esc(x.id)}:${esc(a.id)}" title="Remove from this game">✕</button></span>`
+    :`<span class="${a.paid?'in':'unp'}">${a.paid?'Paid':'Unpaid'}</span>`)+`</div>`).join('');
+}
+$('plClose').onclick=()=>$('plDlg').close();
+$('plPaste').oninput=()=>{const r=readNames($('plPaste').value);$('plPState').textContent=r.players.length?`Found ${r.players.length} players, ${r.players.filter(p=>p.paid).length} ticked as paid.`:''};
+$('plPasteGo').onclick=async()=>{
+  if(!isAdmin)return;const x=items.find(i=>i.id===plId);if(!x)return;
+  const r=readNames($('plPaste').value).players;if(!r.length){toast('No names found in the message.');return}
+  const free=[...x.attendees];const toPay=[],toAdd=[];
+  for(const p of r){
+    const k=p.name.trim().toLowerCase();const i=free.findIndex(a=>a.name.trim().toLowerCase()===k);
+    if(i>=0){const a=free.splice(i,1)[0];if(p.paid&&!a.paid)toPay.push([x.id,a.id])}
+    else toAdd.push(p);
+  }
+  if(!toPay.length&&!toAdd.length){toast('Nothing new in that message.');return}
+  if(toAdd.length){
+    if(preview){for(const p of toAdd)x.attendees.push({id:'n'+Math.random().toString(36).slice(2),name:p.name,paid:p.paid,cash:false,paid_on:null})}
+    else{const ar=await sb.from('attendees').insert(toAdd.map(p=>({entry_id:x.id,name:p.name,paid:p.paid,paid_on:p.paid?today():null})));
+      if(ar.error){toast('Could not add: '+ar.error.message);return}
+      try{await loadAll();await syncGame(x.id)}catch(err){toast(err.message)}}
+  }
+  if(toPay.length){const y=items.find(i=>i.id===x.id);await setPaid(toPay.map(p=>[p[0],p[1]]),true)}
+  else if(!preview)await loadAll();
+  else render();
+  $('plPaste').value='';$('plPState').textContent='';
+  toast(`${toAdd.length} added, ${toPay.length} marked paid.`);
+};
+$('plAll').onclick=()=>{const x=items.find(i=>i.id===plId);if(!x||!isAdmin)return;
+  const un=x.attendees.filter(a=>!a.paid);if(!un.length)return;
+  if(confirm(`Mark all ${un.length} unpaid players as paid for ${prettyDate(x.date)}?`))setPaid(un.map(a=>[x.id,a.id]),true)};
+$('plAdd').addEventListener('submit',async e=>{
+  e.preventDefault();if(!isAdmin)return;
+  const name=$('plName').value.trim();if(!name)return;
+  const x=items.find(i=>i.id===plId);if(!x)return;
+  if(preview){x.attendees.push({id:'n'+Date.now(),name,paid:false,cash:false,paid_on:null});$('plName').value='';render();toast('Preview only: not saved.');return}
+  const r=await sb.from('attendees').insert({entry_id:x.id,name,paid:false});
+  if(r.error){toast('Could not add: '+r.error.message);return}
+  $('plName').value='';await loadAll();try{await syncGame(x.id)}catch(err){toast(err.message)}await loadAll();
+});
+
+/* ---------- login ---------- */
+$('authBtn').onclick=async()=>{if(preview){isAdmin=!isAdmin;document.body.classList.toggle('admin',isAdmin);$('authBtn').textContent=isAdmin?'Log out':'Admin login';render();toast(isAdmin?'Admin preview on. Changes are not saved.':'Logged out.');return}
+  if(isAdmin){await sb.auth.signOut();await refreshAdmin();toast('Logged out.')}else $('loginDlg').showModal()};
+$('loginCancel').onclick=()=>$('loginDlg').close();
+$('loginForm').addEventListener('submit',async e=>{
+  e.preventDefault();$('loginBtn').disabled=true;
+  const {error}=await sb.auth.signInWithPassword({email:$('l_email').value.trim(),password:$('l_pass').value});
+  $('loginBtn').disabled=false;
+  if(error){toast('Login failed: '+error.message);return}
+  $('l_pass').value='';$('loginDlg').close();await refreshAdmin();if(isAdmin)toast('Logged in as admin.');
+});
+
+/* ---------- photo / receipt ---------- */
+async function prepFile(file){
+  if(file.type==='application/pdf'){if(file.size>3e6)throw Error('PDF is too large (max 3 MB).');return {blob:file,ext:'pdf',type:'application/pdf'}}
+  if(!file.type.startsWith('image/'))throw Error('Please choose a photo or a PDF.');
+  const bmp=await createImageBitmap(file);
+  const k=Math.min(1,1400/Math.max(bmp.width,bmp.height));
+  const c=document.createElement('canvas');c.width=Math.round(bmp.width*k);c.height=Math.round(bmp.height*k);
+  c.getContext('2d').drawImage(bmp,0,0,c.width,c.height);
+  const blob=await new Promise(r=>c.toBlob(r,'image/jpeg',.75));
+  if(!blob)throw Error('Could not read this image.');
+  return {blob,ext:'jpg',type:'image/jpeg'};
+}
+
+/* ---------- forms ---------- */
+let editing=null,formType=null,pending;  // pending: undefined = keep, {blob,ext,type} = replace, null = remove
+const num=(id,label,extra='',hint='')=>`<div class="field"><label for="${id}">${label}</label><input id="${id}" type="number" inputmode="numeric" min="0" step="1" ${extra}>${hint?`<div class="hint">${hint}</div>`:''}</div>`;
+const dateF=`<div class="field"><label for="f_date">Date</label><input id="f_date" type="date" required></div>`;
+const notesF=`<div class="field"><label for="f_notes">Notes (optional)</label><textarea id="f_notes"></textarea></div>`;
+const fileF=label=>`<div class="field"><label for="f_file">${label}</label><input id="f_file" type="file" accept="image/*,application/pdf"><div class="hint" id="f_rstate"></div></div>`;
+const FORMS={
+  game:{title:'Game day',html:item=>dateF+(item&&hasList(item)
+      ?`<div class="hint" style="margin:-6px 0 14px">Players and payments are managed with the "players" button in the table.</div>`
+      :`<div class="field"><label for="f_names">Players: paste the WhatsApp sign-up message</label><textarea id="f_names" style="min-height:130px" placeholder="Paste the whole message here. Names with a ✅ are marked as paid. You can also type one name per line."></textarea><div class="hint" id="f_pstate">Optional.</div></div>
+        <div class="field"><label><input id="f_allpaid" type="checkbox" style="width:auto;margin-right:6px">Everyone has paid</label></div>
+        <div class="row2">${num('f_players','Players (if no names)','min="1"')}${num('f_collected','Money collected (Rp)','','Only if no names')}</div>`)
+    +`<div class="row2">${num('f_shuttles','Shuttlecocks used')}${num('f_extraCourts','Extra courts')}</div>${num('f_extraCost','Extra court cost paid (Rp)','','0 if none')}`+notesF+fileF('Photo (optional)')},
+  court:{title:'Court bill',html:()=>dateF+num('f_amount','Amount paid (Rp)')+notesF+fileF('Receipt (photo or PDF)')},
+  shuttle:{title:'Shuttlecock bill',html:()=>dateF+`<div class="row2">${num('f_tubes','Tubes bought','min="1"')}${num('f_amount','Amount paid (Rp)')}</div><div class="hint" style="margin:-6px 0 14px">1 tube = 12 shuttlecocks</div>`+notesF+fileF('Receipt (photo or PDF)')},
+};
+function openForm(type,item){
+  formType=type;editing=item||null;pending=undefined;
+  $('formTitle').textContent=(item?'Edit ':'Add ')+FORMS[type].title.toLowerCase();
+  $('fields').innerHTML=FORMS[type].html(item);
+  const set=(id,v)=>{const e=$(id);if(e)e.value=v};
+  set('f_date',item?item.date:today());
+  if(type==='game'){set('f_players',item?item.players:'');set('f_collected',item?item.collected:'');set('f_shuttles',item?item.shuttles:'');set('f_extraCourts',item?item.extraCourts:0);set('f_extraCost',item?item.extraCost:0)}
+  if(type==='court')set('f_amount',item?item.amount:'');
+  if(type==='shuttle'){set('f_tubes',item?item.tubes:1);set('f_amount',item?item.amount:'')}
+  set('f_notes',item?item.notes:'');
+  const rs=$('f_rstate');
+  const showState=()=>{
+    if(pending&&pending.blob)rs.innerHTML='New file ready. <a href="#" id="rmR">Remove</a>';
+    else if(pending===undefined&&item&&item.receipt)rs.innerHTML='A file is already attached. Choose another to replace it, or <a href="#" id="rmR">remove it</a>.';
+    else rs.textContent='Optional. Take a photo or upload a PDF.';
+    const a=$('rmR');if(a)a.onclick=e=>{e.preventDefault();pending=null;$('f_file').value='';showState()}};
+  showState();
+  $('f_file').onchange=async e=>{const f=e.target.files[0];if(!f)return;
+    try{pending=await prepFile(f)}catch(err){pending=undefined;e.target.value='';toast(err.message||'Could not read this file.')}showState()};
+  const nm=$('f_names');
+  if(nm)nm.oninput=()=>{
+    const r=readNames(nm.value);
+    $('f_pstate').textContent=r.players.length?`Found ${r.players.length} players, ${r.players.filter(p=>p.paid).length} ticked as paid.`:'Optional.';
+    if(r.players.length>=3&&parseSignup(nm.value).players.length){
+      if(r.date&&!editing)set('f_date',r.date);
+      if(r.courts&&!editing){set('f_extraCourts',Math.max(0,r.courts.length-3));if(!$('f_notes').value)set('f_notes','Courts '+r.courts.join(','));
+        $('f_pstate').textContent+=` Courts ${r.courts.join(',')}: ${Math.max(0,r.courts.length-3)} extra (3 are prepaid). Check this.`}
+    }
+  };
+  $('formDlg').showModal();
+}
+$('cancel').onclick=()=>$('formDlg').close();
+$('form').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const raw=id=>$(id)?$(id).value:'0';
+  const v=id=>Number(raw(id));
+  const date=$('f_date').value;
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(date)){toast('Please choose a date.');return}
+  let row={type:formType,date,notes:$('f_notes').value.trim()||null};
+  let ok,newNames=null,newAllPaid=false;
+  if(preview){toast('Preview only: connect Supabase to save new entries.');return}
+  if(formType==='game'){
+    const names=$('f_names')?readNames($('f_names').value).players:[];
+    const managed=editing&&hasList(editing);
+    if(managed){row={...row,shuttles_used:v('f_shuttles'),extra_courts:v('f_extraCourts'),extra_cost:v('f_extraCost')};
+      ok=['f_shuttles','f_extraCourts','f_extraCost'].every(i=>raw(i)!=='')&&isInt(row.shuttles_used)&&isInt(row.extra_courts)&&isInt(row.extra_cost)}
+    else if(names.length){const allPaid=$('f_allpaid').checked;newNames=names;newAllPaid=allPaid;
+      row={...row,players:names.length,collected:(allPaid?names.length:names.filter(p=>p.paid).length)*settings.fee,shuttles_used:v('f_shuttles'),extra_courts:v('f_extraCourts'),extra_cost:v('f_extraCost')};
+      ok=['f_shuttles','f_extraCourts','f_extraCost'].every(i=>raw(i)!=='')&&isInt(row.shuttles_used)&&isInt(row.extra_courts)&&isInt(row.extra_cost)}
+    else{row={...row,players:v('f_players'),collected:v('f_collected'),shuttles_used:v('f_shuttles'),extra_courts:v('f_extraCourts'),extra_cost:v('f_extraCost')};
+      ok=['f_players','f_collected','f_shuttles','f_extraCourts','f_extraCost'].every(i=>raw(i)!=='')&&isInt(row.players,1)&&isInt(row.collected)&&isInt(row.shuttles_used)&&isInt(row.extra_courts)&&isInt(row.extra_cost)}
+  }else if(formType==='court'){
+    row={...row,amount:v('f_amount')};ok=raw('f_amount')!==''&&isInt(row.amount);
+  }else{
+    row={...row,tubes:v('f_tubes'),amount:v('f_amount')};ok=raw('f_amount')!==''&&isInt(row.tubes,1)&&isInt(row.amount);
+  }
+  if(!ok){toast('Please fill in whole numbers (no negatives or decimals).');return}
+
+  $('saveBtn').disabled=true;
+  let uploaded=null;const oldPath=editing?editing.receipt:null;
+  try{
+    if(pending&&pending.blob){
+      uploaded=`${crypto.randomUUID()}.${pending.ext}`;
+      const up=await sb.storage.from('receipts').upload(uploaded,pending.blob,{contentType:pending.type,upsert:false});
+      if(up.error)throw up.error;
+      row.receipt_path=uploaded;
+    }else if(pending===null)row.receipt_path=null;
+    let res,newId=null;
+    if(editing)res=await sb.from('entries').update(row).eq('id',editing.id);
+    else{res=await sb.from('entries').insert(row).select('id').single();if(!res.error)newId=res.data.id}
+    if(res.error)throw res.error;
+    if(newId&&newNames){const ar=await sb.from('attendees').insert(newNames.map(n=>({entry_id:newId,name:n.name,paid:newAllPaid||n.paid,paid_on:(newAllPaid||n.paid)?date:null})));
+      if(ar.error){await sb.from('entries').delete().eq('id',newId);throw ar.error}}
+    if(oldPath&&(pending===null||(pending&&pending.blob)))await sb.storage.from('receipts').remove([oldPath]);
+    $('formDlg').close();toast(editing?'Updated.':'Saved.');await loadAll();
+  }catch(err){
+    if(uploaded)await sb.storage.from('receipts').remove([uploaded]);
+    toast('Could not save: '+(err.message||'unknown error')+(isAdmin?'':' (are you logged in as admin?)'));
+  }finally{$('saveBtn').disabled=false}
+});
+
+/* ---------- table actions ---------- */
+document.addEventListener('click',async e=>{
+  const t=e.target.closest('button');if(!t)return;
+  const d=t.dataset;
+  if(d.players){plId=d.players;renderPlayers();$('plDlg').showModal();return}
+  if(d.pay&&isAdmin){setPaid([d.pay.split(':')],true);return}
+  if(d.payperson&&isAdmin){setPaid(d.payperson.split(',').map(p=>p.split(':')),true);return}
+  if(d.toggle&&isAdmin){const[g,a]=d.toggle.split(':');const x=items.find(i=>i.id===g),at=x&&x.attendees.find(z=>z.id===a);if(at)setPaid([[g,a]],!at.paid);return}
+  if(d.rmp&&isAdmin){const[g,a]=d.rmp.split(':');const x=items.find(i=>i.id===g),at=x&&x.attendees.find(z=>z.id===a);
+    if(!at||!confirm(`Remove ${at.name} from the ${prettyDate(x.date)} game?`))return;
+    if(preview){x.attendees=x.attendees.filter(z=>z.id!==a);render();toast('Preview only: not saved.');return}
+    const r=await sb.from('attendees').delete().eq('id',a);if(r.error){toast('Could not remove: '+r.error.message);return}
+    await loadAll();try{await syncGame(g)}catch(err){toast(err.message)}await loadAll();return}
+  if((t.dataset.add||t.dataset.edit||t.dataset.del)&&preview){toast('Preview only: connect Supabase to add, edit or delete entries.');return}
+  if(!configured)return;
+  if(t.dataset.add&&isAdmin)return openForm(t.dataset.add);
+  if(t.dataset.edit&&isAdmin){const x=items.find(i=>i.id===t.dataset.edit);if(x)openForm(x.type,x);return}
+  if(t.dataset.del&&isAdmin){
+    const x=items.find(i=>i.id===t.dataset.del);
+    if(!x||!confirm(`Delete this entry from ${prettyDate(x.date)}? This cannot be undone.`))return;
+    const r=await sb.from('entries').delete().eq('id',x.id);
+    if(r.error){toast('Could not delete: '+r.error.message);return}
+    if(x.receipt)await sb.storage.from('receipts').remove([x.receipt]);
+    toast('Deleted.');await loadAll();return}
+  if(t.dataset.view){
+    const p=t.dataset.view,url=photoUrl(p);
+    $('viewBody').innerHTML=p.toLowerCase().endsWith('.pdf')?`<a class="btn primary" href="${esc(url)}" target="_blank" rel="noopener">Open PDF</a>`:`<img src="${esc(url)}" alt="Photo or receipt">`;
+    $('viewDlg').showModal();
+  }
+});
+$('closeView').onclick=()=>$('viewDlg').close();
+
+/* ---------- settings (admin) ---------- */
+$('openSettings').onclick=()=>{if(preview){toast('Preview only: connect Supabase to change settings.');return}$('s_cash').value=settings.openingCash;$('s_balls').value=settings.openingShuttles;$('s_fee').value=settings.fee;$('setDlg').showModal()};
+$('closeSet').onclick=()=>$('setDlg').close();
+$('setForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const c=Number($('s_cash').value),b=Number($('s_balls').value),f=Number($('s_fee').value);
+  if($('s_cash').value===''||$('s_balls').value===''||$('s_fee').value===''||!isInt(c)||!isInt(b)||!isInt(f)){toast('Please enter whole numbers, 0 or more.');return}
+  const r=await sb.from('settings').update({opening_cash:c,opening_shuttles:b,fee:f}).eq('id',1);
+  if(r.error){toast('Could not save: '+r.error.message);return}
+  toast('Settings saved.');$('setDlg').close();await loadAll();
+});
+
+/* ---------- start ---------- */
+if(preview){loadSeed();render()}
+else{
+  sb.auth.onAuthStateChange((ev)=>{if(ev==='SIGNED_OUT'){isAdmin=false;document.body.classList.remove('admin');$('authBtn').textContent='Admin login';render()}});
+  (async()=>{await loadAll();await refreshAdmin()})();
+}
+})();
+</script>
+</body>
+</html>
