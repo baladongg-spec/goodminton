@@ -142,6 +142,7 @@ dialog[open]::backdrop{animation:fade .22s ease}
 dialog h2{margin-bottom:14px}
 .field{margin-bottom:14px}
 .field label{display:block;font-size:12px;font-weight:700;margin-bottom:6px}
+select{width:100%;border:1px solid #dbe4de;border-radius:12px;padding:11px 12px;background:#fff;font:inherit}
 input,textarea{width:100%;border:1px solid #dbe4de;border-radius:12px;padding:11px 12px;background:#fff;transition:border-color .2s,box-shadow .2s}
 input:focus,textarea:focus{outline:0;border-color:#3d9a72;box-shadow:0 0 0 4px #d4f0e2}
 input[type=checkbox]{width:auto;margin-right:6px}
@@ -256,6 +257,7 @@ tr.anim,.owe.anim{animation:rowin .4s var(--ease) both;animation-delay:calc(var(
   <div class="sechead rise" style="--d:.24s">
     <h2 data-i="activity"></h2>
     <div class="actions adminonly">
+      <button class="btn primary" id="updBtn" type="button" data-i="updBtn"></button>
       <button class="btn lime" data-add="game" type="button" data-i="addGame"></button>
       <button class="btn" data-add="court" type="button" data-i="addCourt"></button>
       <button class="btn" data-add="shuttle" type="button" data-i="addShuttle"></button>
@@ -280,6 +282,15 @@ tr.anim,.owe.anim{animation:rowin .4s var(--ease) both;animation-delay:calc(var(
   <div class="owegrid" id="outGrid"></div>
   <div class="good" id="outNone" hidden data-i="outNone"></div>
 </main>
+
+<dialog id="updDlg">
+  <h2 data-i="updTitle"></h2>
+  <div class="field"><label for="updText" data-i="updPaste"></label><textarea id="updText" style="min-height:170px" data-ph="updPh"></textarea></div>
+  <div class="field"><label for="updGame" data-i="updGame"></label><select id="updGame"></select></div>
+  <div class="field"><label><input id="updRm" type="checkbox"><span data-i="updRm"></span></label></div>
+  <div class="hint" id="updState" style="font-size:12.5px"></div>
+  <div class="dlgactions"><button class="btn primary" type="button" id="updGo" data-i="updGo"></button><button class="btn" type="button" id="updCancel" data-i="cancel"></button></div>
+</dialog>
 
 <dialog id="loginDlg">
   <h2 data-i="loginTitle"></h2>
@@ -339,6 +350,9 @@ id:{
   owedL:'Belum dibayar',ifAllL:'Kalau semua sudah bayar',people:n=>`${n} orang`,pctPaid:p=>`${p}% sudah masuk`,allPaid:'Semua sudah lunas',
   sparkCap:d=>`Saldo sejak ${d}`,
   ballsLabel:'Stok bola',ballsSub:(t,r)=>t?`${t} slop + ${r} bola (1 slop = 12)`:`${r} bola, kurang dari 1 slop`,
+  updBtn:'↻ Perbarui dari WhatsApp',updTitle:'Perbarui daftar dari WhatsApp',updPaste:'Tempel daftar terbaru (dengan centang ✅)',updPh:'Tempel seluruh pesan daftar di sini. Nama baru ditambahkan dan nama dengan ✅ ditandai lunas.',updGame:'Untuk hari main',updRm:'Hapus juga nama yang belum bayar dan sudah tidak ada di daftar',
+  updState:(n,a,p,r)=>`Ditemukan ${n} pemain: ${a} baru, ${p} baru lunas${r?`, ${r} dihapus`:''}.`,updNew:(n,d)=>`Ditemukan ${n} pemain. Belum ada hari main ${d}. Tekan Perbarui untuk membuatnya.`,updGo:'Perbarui',newGameOpt:d=>`＋ Hari main baru (${d})`,
+  listUpdated:(a,p,r)=>`${a} ditambahkan, ${p} ditandai lunas`+(r?`, ${r} dihapus.`:'.'),
   lowStock:'Stok menipis, waktunya beli bola',negBalls:'Di bawah nol, cek catatan',
   lastGame:d=>`Main terakhir · ${d}`,noGame:'Belum ada main',lgPlayers:'Pemain',costPP:'Biaya per orang',
   lgPaid:(p,n)=>`${p} dari ${n} orang sudah bayar`,
@@ -389,6 +403,9 @@ en:{
   owedL:'Not paid yet',ifAllL:'If everyone pays',people:n=>`${n} ${n===1?'person':'people'}`,pctPaid:p=>`${p}% received`,allPaid:'Everyone has paid',
   sparkCap:d=>`Balance since ${d}`,
   ballsLabel:'Shuttlecocks in stock',ballsSub:(t,r)=>t?`${t} tube${S(t,'s')} + ${r} (12 per tube)`:`${r} left, less than 1 tube`,
+  updBtn:'↻ Update from WhatsApp',updTitle:'Update list from WhatsApp',updPaste:'Paste the latest list (with ✅ ticks)',updPh:'Paste the whole sign-up message here. New names are added and names with a ✅ are marked as paid.',updGame:'For game day',updRm:'Also remove unpaid names that are no longer on the list',
+  updState:(n,a,p,r)=>`Found ${n} players: ${a} new, ${p} newly paid${r?`, ${r} removed`:''}.`,updNew:(n,d)=>`Found ${n} players. There is no game on ${d} yet. Press Update to create it.`,updGo:'Update',newGameOpt:d=>`＋ New game day (${d})`,
+  listUpdated:(a,p,r)=>`${a} added, ${p} marked paid`+(r?`, ${r} removed.`:'.'),
   lowStock:'Running low, time to buy more',negBalls:'Below zero, check the records',
   lastGame:d=>`Last game · ${d}`,noGame:'No games yet',lgPlayers:'Players',costPP:'Cost per person',
   lgPaid:(p,n)=>`${p} of ${n} have paid`,
@@ -447,6 +464,7 @@ const $=id=>document.getElementById(id);
 const esc=v=>String(v??'').replace(/[&<>"']/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
 const nf=n=>Math.abs(Math.round(n)).toLocaleString(lang==='id'?'id-ID':'en-US');
 const rp=n=>(n<0?'−':'')+'Rp'+nf(n);
+const cap=s=>String(s??'').replace(/(^|[\s(\/\-])([a-z]{2})(?![A-Za-z0-9])/g,(m,a,b)=>a+b.toUpperCase()).replace(/(^|[\s(\/\-])([a-z])/g,(m,a,b)=>a+b.toUpperCase());
 const pad=n=>String(n).padStart(2,'0');
 const today=()=>{const d=new Date();return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`};
 const loc=()=>lang==='id'?'id-ID':'en-GB';
@@ -480,7 +498,7 @@ const SEED={"openingCash":1591000,"openingShuttles":27,"fee":30000,"entries":[{"
 function loadSeed(){
   settings={openingCash:SEED.openingCash,openingShuttles:SEED.openingShuttles,fee:SEED.fee};
   items=SEED.entries.map((e,i)=>({id:'e'+i,type:e.type,date:e.date,notes:e.notes||'',receipt:null,players:e.players||0,collected:e.collected||0,shuttles:e.shuttles||0,extraCourts:e.extraCourts||0,extraCost:e.extraCost||0,tubes:e.tubes||0,amount:e.amount||0,
-    attendees:(e.attendees||[]).map((a,j)=>({id:'e'+i+'a'+j,name:a[0],paid:!!a[1],cash:!!a[2],paid_on:null}))}));
+    attendees:(e.attendees||[]).map((a,j)=>({id:'e'+i+'a'+j,name:cap(a[0]),paid:!!a[1],cash:!!a[2],paid_on:null}))}));
   items.sort((a,b)=>a.date<b.date?1:a.date>b.date?-1:0);loaded=true;
 }
 
@@ -510,7 +528,7 @@ async function loadAll(){
   if(e.error||s.error||at.error){toast(t('loadErr'));$('empty').textContent=t('loadErr');return}
   items=e.data.map(fromRow);
   const byId=new Map(items.map(x=>[x.id,x]));
-  for(const a of at.data){const x=byId.get(a.entry_id);if(x)x.attendees.push({id:a.id,name:a.name,paid:a.paid,cash:a.cash,paid_on:a.paid_on})}
+  for(const a of at.data){const x=byId.get(a.entry_id);if(x)x.attendees.push({id:a.id,name:cap(a.name),paid:a.paid,cash:a.cash,paid_on:a.paid_on})}
   if(s.data)settings={openingCash:Number(s.data.opening_cash),openingShuttles:Number(s.data.opening_shuttles),fee:Number(s.data.fee??30000)};
   loaded=true;render();
 }
@@ -637,7 +655,7 @@ function parseSignup(text){
     if(stop)continue;
     let n=m[2];const paid=/[✅✔☑]/.test(n);
     n=n.replace(/[✅✔☑️]/g,'').trim();
-    if(n)players.push({name:n,paid});
+    if(n)players.push({name:cap(n.trim()),paid});
   }
   for(const l of head){
     if(!date){
@@ -657,7 +675,7 @@ function parseSignup(text){
 function readNames(text){
   const p=parseSignup(text);
   if(p.players.length)return p;
-  const plain=String(text||'').split(/\r?\n/).map(x=>x.trim()).filter(Boolean).map(name=>({name,paid:false}));
+  const plain=String(text||'').split(/\r?\n/).map(x=>x.trim()).filter(Boolean).map(name=>({name:cap(name),paid:false}));
   return {players:plain,date:null,courts:null};
 }
 
@@ -725,34 +743,81 @@ function renderPlayers(){
 }
 $('plClose').onclick=()=>$('plDlg').close();
 $('plPaste').oninput=()=>{const r=readNames($('plPaste').value);$('plPState').textContent=r.players.length?t('found',r.players.length,r.players.filter(p=>p.paid).length):''};
-$('plPasteGo').onclick=async()=>{
-  if(!isAdmin)return;const x=items.find(i=>i.id===plId);if(!x)return;
-  const r=readNames($('plPaste').value).players;if(!r.length){toast(t('noNames'));return}
+async function applyList(x,r,removeMissing){
   const free=[...x.attendees];const toPay=[],toAdd=[];
   for(const p of r){
     const k=p.name.trim().toLowerCase();const i=free.findIndex(a=>a.name.trim().toLowerCase()===k);
     if(i>=0){const a=free.splice(i,1)[0];if(p.paid&&!a.paid)toPay.push([x.id,a.id])}
-    else toAdd.push(p);
+    else if(!toAdd.some(q=>q.name.toLowerCase()===k))toAdd.push(p);
   }
-  if(!toPay.length&&!toAdd.length){toast(t('nothingNew'));return}
-  if(toAdd.length){
-    if(preview){for(const p of toAdd)x.attendees.push({id:'n'+Math.random().toString(36).slice(2),name:p.name,paid:p.paid,cash:false,paid_on:null})}
-    else{const ar=await sb.from('attendees').insert(toAdd.map(p=>({entry_id:x.id,name:p.name,paid:p.paid,paid_on:p.paid?today():null})));
-      if(ar.error){toast(t('addErr')+ar.error.message);return}
-      try{await loadAll();await syncGame(x.id)}catch(err){toast(err.message)}}
+  const toRem=removeMissing?free.filter(a=>!a.paid):[];
+  if(!toPay.length&&!toAdd.length&&!toRem.length){toast(t('nothingNew'));return false}
+  if(preview){
+    for(const p of toAdd)x.attendees.push({id:'n'+Math.random().toString(36).slice(2),name:p.name,paid:p.paid,cash:false,paid_on:null});
+    const rm=new Set(toRem.map(a=>a.id));x.attendees=x.attendees.filter(a=>!rm.has(a.id));
+  }else{
+    if(toAdd.length){const ar=await sb.from('attendees').insert(toAdd.map(p=>({entry_id:x.id,name:p.name,paid:p.paid,paid_on:p.paid?today():null})));
+      if(ar.error){toast(t('addErr')+ar.error.message);return false}}
+    if(toRem.length){const dr=await sb.from('attendees').delete().in('id',toRem.map(a=>a.id));
+      if(dr.error){toast(t('rmErr')+dr.error.message);return false}}
+    try{await loadAll();await syncGame(x.id)}catch(err){toast(err.message)}
   }
   if(toPay.length)await setPaid(toPay,true);
   else if(!preview)await loadAll();
   else render();
-  $('plPaste').value='';$('plPState').textContent='';
-  toast(t('addedPaid',toAdd.length,toPay.length));
+  toast(t('listUpdated',toAdd.length,toPay.length,toRem.length));
+  return true;
+}
+$('plPasteGo').onclick=async()=>{
+  if(!isAdmin)return;const x=items.find(i=>i.id===plId);if(!x)return;
+  const r=readNames($('plPaste').value).players;if(!r.length){toast(t('noNames'));return}
+  if(await applyList(x,r,false)){$('plPaste').value='';$('plPState').textContent=''}
+};
+/* ---------- update from WhatsApp (top button) ---------- */
+let updManual=false;
+function diffFor(x,r,rm){
+  const free=[...x.attendees];let add=0,pay=0;const seen=new Set();
+  for(const p of r){const k=p.name.trim().toLowerCase();const i=free.findIndex(a=>a.name.trim().toLowerCase()===k);
+    if(i>=0){const a=free.splice(i,1)[0];if(p.paid&&!a.paid)pay++}else if(!seen.has(k)){seen.add(k);add++}}
+  return {add,pay,rem:rm?free.filter(a=>!a.paid).length:0};
+}
+function updRefresh(){
+  const parsed=readNames($('updText').value),r=parsed.players;
+  const games=items.filter(x=>x.type==='game').sort((a,b)=>a.date<b.date?1:-1);
+  const match=parsed.date&&games.find(g=>g.date===parsed.date);
+  const sel=$('updGame'),keep=sel.value;
+  sel.innerHTML=(parsed.date&&!match?`<option value="new">${esc(t('newGameOpt',prettyDate(parsed.date)))}</option>`:'')+games.map(g=>`<option value="${esc(g.id)}">${esc(prettyDate(g.date))} · ${t('playersBtn',gPlayers(g))}</option>`).join('');
+  if(updManual&&[...sel.options].some(o=>o.value===keep))sel.value=keep;
+  else sel.value=match?match.id:(parsed.date?'new':(games[0]?games[0].id:''));
+  const st=$('updState');
+  if(!r.length){st.textContent='';return}
+  if(sel.value==='new'){st.textContent=t('updNew',r.length,prettyDate(parsed.date));return}
+  const x=items.find(i=>i.id===sel.value);if(!x){st.textContent='';return}
+  const d=diffFor(x,r,$('updRm').checked);st.textContent=t('updState',r.length,d.add,d.pay,d.rem);
+}
+$('updBtn').onclick=()=>{updManual=false;$('updText').value='';$('updRm').checked=false;updRefresh();$('updDlg').showModal()};
+$('updText').oninput=updRefresh;$('updRm').onchange=updRefresh;
+$('updGame').onchange=()=>{updManual=true;updRefresh()};
+$('updCancel').onclick=()=>$('updDlg').close();
+$('updGo').onclick=async()=>{
+  if(!isAdmin)return;
+  const parsed=readNames($('updText').value),r=parsed.players;if(!r.length){toast(t('noNames'));return}
+  const v=$('updGame').value;
+  if(v==='new'){
+    $('updDlg').close();openForm('game');const nm=$('f_names');
+    if(nm){nm.value=$('updText').value;nm.dispatchEvent(new Event('input'))}return}
+  const x=items.find(i=>i.id===v);if(!x)return;
+  $('updGo').disabled=true;
+  const ok=await applyList(x,r,$('updRm').checked);
+  $('updGo').disabled=false;
+  if(ok)$('updDlg').close();
 };
 $('plAll').onclick=()=>{const x=items.find(i=>i.id===plId);if(!x||!isAdmin)return;
   const un=x.attendees.filter(a=>!a.paid);if(!un.length)return;
   if(confirm(t('confirmAll',un.length,prettyDate(x.date))))setPaid(un.map(a=>[x.id,a.id]),true)};
 $('plAdd').addEventListener('submit',async e=>{
   e.preventDefault();if(!isAdmin)return;
-  const name=$('plName').value.trim();if(!name)return;
+  const name=cap($('plName').value.trim());if(!name)return;
   const x=items.find(i=>i.id===plId);if(!x)return;
   if(preview){x.attendees.push({id:'n'+Date.now(),name,paid:false,cash:false,paid_on:null});$('plName').value='';render();toast(t('previewNotSaved'));return}
   const r=await sb.from('attendees').insert({entry_id:x.id,name,paid:false});
